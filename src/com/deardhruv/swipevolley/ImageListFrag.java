@@ -64,7 +64,8 @@ public class ImageListFrag extends Fragment implements IParseListener, OnItemCli
 		}
 
 		Bundle parms = new Bundle();
-		parms.putString(ServiceURL.INDENT, "");
+		// change here 07-FEB
+		// parms.putString(ServiceURL.INDENT, "");
 
 		JSONRequestResponse mResponse = new JSONRequestResponse(mContext);
 		if (isImageChanged) {
