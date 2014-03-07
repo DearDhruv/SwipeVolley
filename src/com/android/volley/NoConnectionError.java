@@ -18,15 +18,12 @@ package com.android.volley;
  * Volley request.
  */
 @SuppressWarnings("serial")
-public class NoConnectionError extends NetworkError
-{
-	public NoConnectionError()
-	{
+public class NoConnectionError extends NetworkError {
+	public NoConnectionError() {
 		super();
 	}
-
-	public NoConnectionError(Throwable reason)
-	{
+	
+	public NoConnectionError(Throwable reason) {
 		super(reason);
 	}
 }

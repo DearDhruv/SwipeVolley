@@ -29,7 +29,7 @@ public class AndroidAuthenticator implements Authenticator {
 	private final Account	mAccount;
 	private final String	mAuthTokenType;
 	private final boolean	mNotifyAuthFailure;
-
+	
 	/**
 	 * Creates a new authenticator.
 	 * 
@@ -43,7 +43,7 @@ public class AndroidAuthenticator implements Authenticator {
 	public AndroidAuthenticator(Context context, Account account, String authTokenType) {
 		this(context, account, authTokenType, false);
 	}
-
+	
 	/**
 	 * Creates a new authenticator.
 	 * 
@@ -62,19 +62,20 @@ public class AndroidAuthenticator implements Authenticator {
 		mAuthTokenType = authTokenType;
 		mNotifyAuthFailure = notifyAuthFailure;
 	}
-
+	
 	/**
 	 * Returns the Account being used by this authenticator.
 	 */
 	public Account getAccount() {
 		return mAccount;
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public String getAuthToken() throws AuthFailureError {
 		final AccountManager accountManager = AccountManager.get(mContext);
-		AccountManagerFuture<Bundle> future = accountManager.getAuthToken(mAccount, mAuthTokenType, mNotifyAuthFailure, null, null);
+		AccountManagerFuture<Bundle> future = accountManager.getAuthToken(mAccount, mAuthTokenType, mNotifyAuthFailure,
+				null, null);
 		Bundle result;
 		try {
 			result = future.getResult();
@@ -90,13 +91,16 @@ public class AndroidAuthenticator implements Authenticator {
 			}
 			authToken = result.getString(AccountManager.KEY_AUTHTOKEN);
 		}
-		if (authToken == null) { throw new AuthFailureError("Got null auth token for type: " + mAuthTokenType); }
-
+		if (authToken == null) {
+			throw new AuthFailureError("Got null auth token for type: " + mAuthTokenType);
+		}
+		
 		return authToken;
 	}
-
+	
 	@Override
-	public void invalidateAuthToken(String authToken) {
+	public void invalidateAuthToken(
+			String authToken) {
 		AccountManager.get(mContext).invalidateAuthToken(mAccount.type, authToken);
 	}
 }

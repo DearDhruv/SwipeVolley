@@ -15,30 +15,35 @@ import com.android.volley.examples.toolbox.MyVolley;
 import com.android.volley.toolbox.NetworkImageView;
 
 public class LazyAdapter extends BaseAdapter {
-
+	
 	private Activity				activity;
 	private static LayoutInflater	inflater	= null;
 	private ArrayList<ItemDetail>	mList;
-
+	
 	public LazyAdapter(Activity a, List<ItemDetail> list) {
 		activity = a;
 		mList = new ArrayList<ItemDetail>(list);
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
-
+	
 	public int getCount() {
 		return mList.size();
 	}
-
-	public Object getItem(int position) {
+	
+	public Object getItem(
+			int position) {
 		return mList.get(position);
 	}
-
-	public long getItemId(int position) {
+	
+	public long getItemId(
+			int position) {
 		return position;
 	}
-
-	public View getView(int position, View convertView, ViewGroup parent) {
+	
+	public View getView(
+			int position,
+			View convertView,
+			ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.row_listview_item, null);
@@ -53,11 +58,11 @@ public class LazyAdapter extends BaseAdapter {
 		holder.image.setDefaultImageResId(R.drawable.ic_launcher);
 		holder.image.setImageUrl(mList.get(position).getImgUrl(), MyVolley.getImageLoader());
 		holder.text.setText("" + mList.get(position).getName());
-
+		
 		// convertView.setTag(holder);
 		return convertView;
 	}
-
+	
 	class ViewHolder {
 		TextView			text;
 		NetworkImageView	image;

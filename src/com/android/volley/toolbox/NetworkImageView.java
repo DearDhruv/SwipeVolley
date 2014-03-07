@@ -28,36 +28,36 @@ import com.android.volley.toolbox.ImageLoader.ImageListener;
 public class NetworkImageView extends ImageView {
 	/** The URL of the network image to load */
 	private String			mUrl;
-
+	
 	/**
 	 * Resource ID of the image to be used as a placeholder until the network
 	 * image is loaded.
 	 */
 	private int				mDefaultImageId;
-
+	
 	/**
 	 * Resource ID of the image to be used if the network response fails.
 	 */
 	private int				mErrorImageId;
-
+	
 	/** Local copy of the ImageLoader. */
 	private ImageLoader		mImageLoader;
-
+	
 	/** Current ImageContainer. (either in-flight or finished) */
 	private ImageContainer	mImageContainer;
-
+	
 	public NetworkImageView(Context context) {
 		this(context, null);
 	}
-
+	
 	public NetworkImageView(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
-
+	
 	public NetworkImageView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
-
+	
 	/**
 	 * Sets URL of the image that should be loaded into this view. Note that
 	 * calling this will immediately either set the cached image (if available)
@@ -72,45 +72,53 @@ public class NetworkImageView extends ImageView {
 	 * @param imageLoader
 	 *            ImageLoader that will be used to make the request.
 	 */
-	public void setImageUrl(String url, ImageLoader imageLoader) {
+	public void setImageUrl(
+			String url,
+			ImageLoader imageLoader) {
 		mUrl = url;
 		mImageLoader = imageLoader;
 		// The URL has potentially changed. See if we need to load it.
 		loadImageIfNecessary(false);
 	}
-
+	
 	/**
 	 * Sets the default image resource ID to be used for this view until the
 	 * attempt to load it completes.
 	 */
-	public void setDefaultImageResId(int defaultImage) {
+	public void setDefaultImageResId(
+			int defaultImage) {
 		mDefaultImageId = defaultImage;
 	}
-
+	
 	/**
 	 * Sets the error image resource ID to be used for this view in the event
 	 * that the image requested fails to load.
 	 */
-	public void setErrorImageResId(int errorImage) {
+	public void setErrorImageResId(
+			int errorImage) {
 		mErrorImageId = errorImage;
 	}
-
+	
 	/**
 	 * Loads the image for the view if it isn't already loaded.
 	 * 
 	 * @param isInLayoutPass
 	 *            True if this was invoked from a layout pass, false otherwise.
 	 */
-	private void loadImageIfNecessary(final boolean isInLayoutPass) {
+	private void loadImageIfNecessary(
+			final boolean isInLayoutPass) {
 		int width = getWidth();
 		int height = getHeight();
-
-		boolean isFullyWrapContent = getLayoutParams().height == LayoutParams.WRAP_CONTENT && getLayoutParams().width == LayoutParams.WRAP_CONTENT;
+		
+		boolean isFullyWrapContent = getLayoutParams().height == LayoutParams.WRAP_CONTENT
+				&& getLayoutParams().width == LayoutParams.WRAP_CONTENT;
 		// if the view's bounds aren't known yet, and this is not a
 		// wrap-content/wrap-content
 		// view, hold off on loading the image.
-		if (width == 0 && height == 0 && !isFullyWrapContent) { return; }
-
+		if (width == 0 && height == 0 && !isFullyWrapContent) {
+			return;
+		}
+		
 		// if the URL to be loaded in this view is empty, cancel any old
 		// requests and clear the
 		// currently loaded image.
@@ -122,7 +130,7 @@ public class NetworkImageView extends ImageView {
 			setImageBitmap(null);
 			return;
 		}
-
+		
 		// if there was an old request in this view, check if it needs to be
 		// canceled.
 		if (mImageContainer != null && mImageContainer.getRequestUrl() != null) {
@@ -137,21 +145,25 @@ public class NetworkImageView extends ImageView {
 				setImageBitmap(null);
 			}
 		}
-
+		
 		// The pre-existing content of this view didn't match the current URL.
 		// Load the new image
 		// from the network.
 		ImageContainer newContainer = mImageLoader.get(mUrl, new ImageListener() {
 			@Override
-			public void onErrorResponse(VolleyError error) {
+			public void onErrorResponse(
+					VolleyError error) {
 				if (mErrorImageId != 0) {
 					setImageResource(mErrorImageId);
 				}
 			}
-
+			
 			@Override
-			public void onResponse(final ImageContainer response, boolean isImmediate, boolean shouldAnimate) {
-
+			public void onResponse(
+					final ImageContainer response,
+					boolean isImmediate,
+					boolean shouldAnimate) {
+				
 				// If this was an immediate response that was delivered inside
 				// of a layout
 				// pass do not set the image immediately as it will trigger a
@@ -168,7 +180,7 @@ public class NetworkImageView extends ImageView {
 					});
 					return;
 				}
-
+				
 				if (response.getBitmap() != null) {
 					setImageBitmap(response.getBitmap());
 				}
@@ -177,17 +189,22 @@ public class NetworkImageView extends ImageView {
 				}
 			}
 		});
-
+		
 		// update the ImageContainer to be the new bitmap container.
 		mImageContainer = newContainer;
 	}
-
+	
 	@Override
-	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+	protected void onLayout(
+			boolean changed,
+			int left,
+			int top,
+			int right,
+			int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
 		loadImageIfNecessary(true);
 	}
-
+	
 	@Override
 	protected void onDetachedFromWindow() {
 		if (mImageContainer != null) {
@@ -201,7 +218,7 @@ public class NetworkImageView extends ImageView {
 		}
 		super.onDetachedFromWindow();
 	}
-
+	
 	@Override
 	protected void drawableStateChanged() {
 		super.drawableStateChanged();

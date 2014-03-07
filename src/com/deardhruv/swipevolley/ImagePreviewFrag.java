@@ -18,47 +18,53 @@ public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 	NetworkImageView	imagePreview;
 	TextView			txtName;
 	ItemDetail			sharedItemArg;
-
+	
 	public ImagePreviewFrag() {
 	}
-
+	
 	public ImagePreviewFrag(IUpdateImageView mCallback) {
 		// TODO Auto-generated constructor stub
 		mCallback = this;
 	}
-
+	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(
+			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null)
 			sharedItemArg = (ItemDetail) getArguments().get("item");
 	}
-
+	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(
+			LayoutInflater inflater,
+			ViewGroup container,
+			Bundle savedInstanceState) {
 		fragView = inflater.inflate(R.layout.image_preview_layout, container, false);
 		imagePreview = (NetworkImageView) fragView.findViewById(R.id.imagePreview);
 		txtName = (TextView) fragView.findViewById(R.id.txtName);
 		return fragView;
 	}
-
+	
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
+	public void onActivityCreated(
+			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		if (sharedItemArg != null) {
 			updateImagePreview(sharedItemArg);
 		}
 	}
-
+	
 	@Override
-	public void updateImagePreview(ItemDetail sharedItem) {
+	public void updateImagePreview(
+			ItemDetail sharedItem) {
 		if (sharedItem != null) {
 			imagePreview.setImageUrl(sharedItem.getImgUrl(), MyVolley.getImageLoader());
 			txtName.setText(sharedItem.getName());
-
+			
 		}
 	}
-
+	
 }

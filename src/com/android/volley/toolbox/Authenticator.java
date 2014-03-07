@@ -18,8 +18,7 @@ import com.android.volley.AuthFailureError;
 /**
  * An interface for interacting with auth tokens.
  */
-public interface Authenticator
-{
+public interface Authenticator {
 	/**
 	 * Synchronously retrieves an auth token.
 	 * 
@@ -27,9 +26,10 @@ public interface Authenticator
 	 *             If authentication did not succeed
 	 */
 	public String getAuthToken() throws AuthFailureError;
-
+	
 	/**
 	 * Invalidates the provided auth token.
 	 */
-	public void invalidateAuthToken(String authToken);
+	public void invalidateAuthToken(
+			String authToken);
 }

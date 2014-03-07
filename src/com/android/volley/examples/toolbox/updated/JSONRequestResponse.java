@@ -21,45 +21,54 @@ import com.android.volley.toolbox.JsonObjectRequest;
  * 
  */
 public class JSONRequestResponse {
-
+	
 	public JSONRequestResponse(Context cntx) {
 		mContext = cntx;
 	}
-
+	
 	@SuppressWarnings("unused")
 	private final Context	mContext;
 	private int				reqCode;
 	private IParseListener	listner;
-
+	
 	private boolean			isFile	= false;
 	private String			file_path	= "", key = "";
-
-	public void getResponse(String url, final int requestCode, IParseListener mParseListener) {
+	
+	public void getResponse(
+			String url,
+			final int requestCode,
+			IParseListener mParseListener) {
 		getResponse(url, requestCode, mParseListener, null);
 	}
-
-	public void getResponse(String url, final int requestCode, IParseListener mParseListener, Bundle params) {
+	
+	public void getResponse(
+			String url,
+			final int requestCode,
+			IParseListener mParseListener,
+			Bundle params) {
 		this.listner = mParseListener;
 		this.reqCode = requestCode;
-
+		
 		Response.Listener<JSONObject> sListener = new Response.Listener<JSONObject>() {
 			@Override
-			public void onResponse(JSONObject response) {
+			public void onResponse(
+					JSONObject response) {
 				if (listner != null) {
 					listner.SuccessResponse(response, reqCode);
 				}
 			}
 		};
-
+		
 		Response.ErrorListener eListener = new Response.ErrorListener() {
 			@Override
-			public void onErrorResponse(VolleyError error) {
+			public void onErrorResponse(
+					VolleyError error) {
 				if (listner != null) {
 					listner.ErrorResponse(error, reqCode);
 				}
 			}
 		};
-
+		
 		if (!isFile) {
 			JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, sListener, eListener);
 			MyVolley.getRequestQueue().add(jsObjRequest);
@@ -75,24 +84,26 @@ public class JSONRequestResponse {
 			}
 		}
 	}
-
+	
 	/**
 	 * @return the isFile
 	 */
 	public boolean isFile() {
 		return isFile;
 	}
-
+	
 	/**
 	 * @param isFile
 	 *            the File to set
 	 */
-	public void setFile(String param, String path) {
+	public void setFile(
+			String param,
+			String path) {
 		if (path != null && param != null) {
 			key = param;
 			file_path = path;
 			this.isFile = true;
 		}
 	}
-
+	
 }

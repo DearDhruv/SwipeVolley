@@ -40,40 +40,37 @@ import com.android.volley.Request.Method;
 /**
  * An HttpStack that performs request over an {@link HttpClient}.
  */
-public class HttpClientStack implements HttpStack
-{
-	protected final HttpClient mClient;
-
-	private final static String HEADER_CONTENT_TYPE = "Content-Type";
-
-	public HttpClientStack(HttpClient client)
-	{
+public class HttpClientStack implements HttpStack {
+	protected final HttpClient	mClient;
+	
+	private final static String	HEADER_CONTENT_TYPE	= "Content-Type";
+	
+	public HttpClientStack(HttpClient client) {
 		mClient = client;
 	}
-
-	private static void addHeaders(HttpUriRequest httpRequest, Map<String, String> headers)
-	{
-		for (String key : headers.keySet())
-		{
+	
+	private static void addHeaders(
+			HttpUriRequest httpRequest,
+			Map<String, String> headers) {
+		for (String key : headers.keySet()) {
 			httpRequest.setHeader(key, headers.get(key));
 		}
 	}
-
+	
 	@SuppressWarnings("unused")
-	private static List<NameValuePair> getPostParameterPairs(Map<String, String> postParams)
-	{
+	private static List<NameValuePair> getPostParameterPairs(
+			Map<String, String> postParams) {
 		List<NameValuePair> result = new ArrayList<NameValuePair>(postParams.size());
-		for (String key : postParams.keySet())
-		{
+		for (String key : postParams.keySet()) {
 			result.add(new BasicNameValuePair(key, postParams.get(key)));
 		}
 		return result;
 	}
-
+	
 	@Override
-	public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders) throws IOException,
-			AuthFailureError
-	{
+	public HttpResponse performRequest(
+			Request<?> request,
+			Map<String, String> additionalHeaders) throws IOException, AuthFailureError {
 		HttpUriRequest httpRequest = createHttpRequest(request, additionalHeaders);
 		addHeaders(httpRequest, additionalHeaders);
 		addHeaders(httpRequest, request.getHeaders());
@@ -86,26 +83,23 @@ public class HttpClientStack implements HttpStack
 		HttpConnectionParams.setSoTimeout(httpParams, timeoutMs);
 		return mClient.execute(httpRequest);
 	}
-
+	
 	/**
 	 * Creates the appropriate subclass of HttpUriRequest for passed in request.
 	 */
 	@SuppressWarnings("deprecation")
-	/* protected */static HttpUriRequest createHttpRequest(Request<?> request, Map<String, String> additionalHeaders)
-			throws AuthFailureError
-	{
-		switch (request.getMethod())
-		{
-			case Method.DEPRECATED_GET_OR_POST:
-			{
+	/* protected */static HttpUriRequest createHttpRequest(
+			Request<?> request,
+			Map<String, String> additionalHeaders) throws AuthFailureError {
+		switch (request.getMethod()) {
+			case Method.DEPRECATED_GET_OR_POST: {
 				// This is the deprecated way that needs to be handled for
 				// backwards compatibility.
 				// If the request's post body is null, then the assumption is
 				// that the request is
 				// GET. Otherwise, it is assumed that the request is a POST.
 				byte[] postBody = request.getPostBody();
-				if (postBody != null)
-				{
+				if (postBody != null) {
 					HttpPost postRequest = new HttpPost(request.getUrl());
 					postRequest.addHeader(HEADER_CONTENT_TYPE, request.getPostBodyContentType());
 					HttpEntity entity;
@@ -113,8 +107,7 @@ public class HttpClientStack implements HttpStack
 					postRequest.setEntity(entity);
 					return postRequest;
 				}
-				else
-				{
+				else {
 					return new HttpGet(request.getUrl());
 				}
 			}
@@ -122,15 +115,13 @@ public class HttpClientStack implements HttpStack
 				return new HttpGet(request.getUrl());
 			case Method.DELETE:
 				return new HttpDelete(request.getUrl());
-			case Method.POST:
-			{
+			case Method.POST: {
 				HttpPost postRequest = new HttpPost(request.getUrl());
 				postRequest.addHeader(HEADER_CONTENT_TYPE, request.getBodyContentType());
 				setEntityIfNonEmptyBody(postRequest, request);
 				return postRequest;
 			}
-			case Method.PUT:
-			{
+			case Method.PUT: {
 				HttpPut putRequest = new HttpPut(request.getUrl());
 				putRequest.addHeader(HEADER_CONTENT_TYPE, request.getBodyContentType());
 				setEntityIfNonEmptyBody(putRequest, request);
@@ -140,26 +131,25 @@ public class HttpClientStack implements HttpStack
 				throw new IllegalStateException("Unknown request method.");
 		}
 	}
-
-	private static void setEntityIfNonEmptyBody(HttpEntityEnclosingRequestBase httpRequest, Request<?> request)
-			throws AuthFailureError
-	{
+	
+	private static void setEntityIfNonEmptyBody(
+			HttpEntityEnclosingRequestBase httpRequest,
+			Request<?> request) throws AuthFailureError {
 		byte[] body = request.getBody();
-		if (body != null)
-		{
+		if (body != null) {
 			HttpEntity entity = new ByteArrayEntity(body);
 			httpRequest.setEntity(entity);
 		}
 	}
-
+	
 	/**
 	 * Called before the request is executed using the underlying HttpClient.
 	 * <p>
 	 * Overwrite in subclasses to augment the request.
 	 * </p>
 	 */
-	protected void onPrepareRequest(HttpUriRequest request) throws IOException
-	{
+	protected void onPrepareRequest(
+			HttpUriRequest request) throws IOException {
 		// Nothing.
 	}
 }

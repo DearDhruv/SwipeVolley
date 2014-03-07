@@ -10,24 +10,28 @@ import com.android.volley.VolleyError;
  * @author DearDhruv
  */
 public interface IParseListener {
-
+	
 	// Interface methods for Responses
-
+	
 	// void ErrorResponse(VolleyError error, int requestCode, int errorcode);
-
+	
 	/**
 	 * Invoked when any network failure or JSON parsing failure.
 	 * 
 	 * @param error
 	 * @param requestCode
 	 */
-	void ErrorResponse(VolleyError error, int requestCode);
-
+	void ErrorResponse(
+			VolleyError error,
+			int requestCode);
+	
 	/**
 	 * Invoked when successful response and successful JSON parsing completed.
 	 * 
 	 * @param response
 	 * @param requestCode
 	 */
-	void SuccessResponse(JSONObject response, int requestCode);
+	void SuccessResponse(
+			JSONObject response,
+			int requestCode);
 }

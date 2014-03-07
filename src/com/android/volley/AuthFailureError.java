@@ -20,48 +20,39 @@ import android.content.Intent;
  * Request.
  */
 @SuppressWarnings("serial")
-public class AuthFailureError extends VolleyError
-{
+public class AuthFailureError extends VolleyError {
 	/**
 	 * An intent that can be used to resolve this exception. (Brings up the
 	 * password dialog.)
 	 */
-	private Intent mResolutionIntent;
-
-	public AuthFailureError()
-	{
+	private Intent	mResolutionIntent;
+	
+	public AuthFailureError() {
 	}
-
-	public AuthFailureError(Intent intent)
-	{
+	
+	public AuthFailureError(Intent intent) {
 		mResolutionIntent = intent;
 	}
-
-	public AuthFailureError(NetworkResponse response)
-	{
+	
+	public AuthFailureError(NetworkResponse response) {
 		super(response);
 	}
-
-	public AuthFailureError(String message)
-	{
+	
+	public AuthFailureError(String message) {
 		super(message);
 	}
-
-	public AuthFailureError(String message, Exception reason)
-	{
+	
+	public AuthFailureError(String message, Exception reason) {
 		super(message, reason);
 	}
-
-	public Intent getResolutionIntent()
-	{
+	
+	public Intent getResolutionIntent() {
 		return mResolutionIntent;
 	}
-
+	
 	@Override
-	public String getMessage()
-	{
-		if (mResolutionIntent != null)
-		{
+	public String getMessage() {
+		if (mResolutionIntent != null) {
 			return "User needs to (re)enter credentials.";
 		}
 		return super.getMessage();

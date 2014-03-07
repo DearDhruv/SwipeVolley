@@ -19,8 +19,7 @@ import java.util.Map;
 /**
  * An interface for a cache keyed by a String with a byte array as data.
  */
-public interface Cache
-{
+public interface Cache {
 	/**
 	 * Retrieves an entry from the cache.
 	 * 
@@ -28,8 +27,9 @@ public interface Cache
 	 *            Cache key
 	 * @return An {@link Entry} or null in the event of a cache miss
 	 */
-	public Entry get(String key);
-
+	public Entry get(
+			String key);
+	
 	/**
 	 * Adds or replaces an entry to the cache.
 	 * 
@@ -38,15 +38,16 @@ public interface Cache
 	 * @param entry
 	 *            Data to store and metadata for cache coherency, TTL, etc.
 	 */
-	public void put(String key, Entry entry);
-
+	public void put(
+			String key,
+			Entry entry);
+	
 	/**
 	 * Performs any potentially long-running actions needed to initialize the
-	 * cache;
-	 * will be called from a worker thread.
+	 * cache; will be called from a worker thread.
 	 */
 	public void initialize();
-
+	
 	/**
 	 * Invalidates an entry in the cache.
 	 * 
@@ -55,57 +56,57 @@ public interface Cache
 	 * @param fullExpire
 	 *            True to fully expire the entry, false to soft expire
 	 */
-	public void invalidate(String key, boolean fullExpire);
-
+	public void invalidate(
+			String key,
+			boolean fullExpire);
+	
 	/**
 	 * Removes an entry from the cache.
 	 * 
 	 * @param key
 	 *            Cache key
 	 */
-	public void remove(String key);
-
+	public void remove(
+			String key);
+	
 	/**
 	 * Empties the cache.
 	 */
 	public void clear();
-
+	
 	/**
 	 * Data and metadata for an entry returned by the cache.
 	 */
-	public static class Entry
-	{
+	public static class Entry {
 		/** The data returned from cache. */
-		public byte[] data;
-
+		public byte[]				data;
+		
 		/** ETag for cache coherency. */
-		public String etag;
-
+		public String				etag;
+		
 		/** Date of this response as reported by the server. */
-		public long serverDate;
-
+		public long					serverDate;
+		
 		/** TTL for this record. */
-		public long ttl;
-
+		public long					ttl;
+		
 		/** Soft TTL for this record. */
-		public long softTtl;
-
+		public long					softTtl;
+		
 		/**
 		 * Immutable response headers as received from server; must be non-null.
 		 */
-		public Map<String, String> responseHeaders = Collections.emptyMap();
-
+		public Map<String, String>	responseHeaders	= Collections.emptyMap();
+		
 		/** True if the entry is expired. */
-		public boolean isExpired()
-		{
+		public boolean isExpired() {
 			return this.ttl < System.currentTimeMillis();
 		}
-
+		
 		/** True if a refresh is needed from the original data source. */
-		public boolean refreshNeeded()
-		{
+		public boolean refreshNeeded() {
 			return this.softTtl < System.currentTimeMillis();
 		}
 	}
-
+	
 }

@@ -18,36 +18,35 @@ import com.android.volley.Cache;
 /**
  * A cache that doesn't.
  */
-public class NoCache implements Cache
-{
+public class NoCache implements Cache {
 	@Override
-	public void clear()
-	{
+	public void clear() {
 	}
-
+	
 	@Override
-	public Entry get(String key)
-	{
+	public Entry get(
+			String key) {
 		return null;
 	}
-
+	
 	@Override
-	public void put(String key, Entry entry)
-	{
+	public void put(
+			String key,
+			Entry entry) {
 	}
-
+	
 	@Override
-	public void invalidate(String key, boolean fullExpire)
-	{
+	public void invalidate(
+			String key,
+			boolean fullExpire) {
 	}
-
+	
 	@Override
-	public void remove(String key)
-	{
+	public void remove(
+			String key) {
 	}
-
+	
 	@Override
-	public void initialize()
-	{
+	public void initialize() {
 	}
 }

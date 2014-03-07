@@ -24,10 +24,9 @@ import com.android.volley.Response.Listener;
 /**
  * A canned request for retrieving the response body at a given URL as a String.
  */
-public class StringRequest extends Request<String>
-{
-	private final Listener<String> mListener;
-
+public class StringRequest extends Request<String> {
+	private final Listener<String>	mListener;
+	
 	/**
 	 * Creates a new request with the given method.
 	 * 
@@ -40,12 +39,11 @@ public class StringRequest extends Request<String>
 	 * @param errorListener
 	 *            Error listener, or null to ignore errors
 	 */
-	public StringRequest(int method, String url, Listener<String> listener, ErrorListener errorListener)
-	{
+	public StringRequest(int method, String url, Listener<String> listener, ErrorListener errorListener) {
 		super(method, url, errorListener);
 		mListener = listener;
 	}
-
+	
 	/**
 	 * Creates a new GET request.
 	 * 
@@ -56,27 +54,24 @@ public class StringRequest extends Request<String>
 	 * @param errorListener
 	 *            Error listener, or null to ignore errors
 	 */
-	public StringRequest(String url, Listener<String> listener, ErrorListener errorListener)
-	{
+	public StringRequest(String url, Listener<String> listener, ErrorListener errorListener) {
 		this(Method.GET, url, listener, errorListener);
 	}
-
+	
 	@Override
-	protected void deliverResponse(String response)
-	{
+	protected void deliverResponse(
+			String response) {
 		mListener.onResponse(response);
 	}
-
+	
 	@Override
-	protected Response<String> parseNetworkResponse(NetworkResponse response)
-	{
+	protected Response<String> parseNetworkResponse(
+			NetworkResponse response) {
 		String parsed;
-		try
-		{
+		try {
 			parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
 		}
-		catch (UnsupportedEncodingException e)
-		{
+		catch (UnsupportedEncodingException e) {
 			parsed = new String(response.data);
 		}
 		return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
