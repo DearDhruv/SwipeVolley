@@ -15,7 +15,7 @@ public class ServiceURL {
 
 	public static final String	INDENT		= "indent";
 	public static final String	IMAGE_URL	= "image_url";
-	public static final String	mainURL		= "http://www.json-generator.com/j/cliVQMHeZK?";
+	public static final String	mainURL		= "https://raw.github.com/DearDhruv/SwipeVolley/master/json_res";
 
 	// "http://www.json-generator.com/j/cfdQrdxvma?";
 	// http://www.json-generator.com/j/cfxqvbSsCW?indent=4
