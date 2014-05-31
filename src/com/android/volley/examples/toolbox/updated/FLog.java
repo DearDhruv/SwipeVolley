@@ -11,90 +11,64 @@ import android.util.Log;
  * Logs
  * 
  * @author DearDhruv
- * 
  */
 public class FLog {
 	public static boolean	DEBUG	= false;
 	public static String	TAG		= "Volley";
 	
-	public static void e(
-			String tag,
-			String msg) {
+	public static void e(String tag, String msg) {
 		if (DEBUG) {
 			Log.e(tag, msg);
 		}
 	}
 	
-	public static void i(
-			String tag,
-			String msg) {
+	public static void i(String tag, String msg) {
 		if (DEBUG) {
 			Log.i(tag, msg);
 		}
 	}
 	
-	public static void w(
-			String tag,
-			String msg) {
+	public static void w(String tag, String msg) {
 		if (DEBUG) {
 			Log.w(tag, msg);
 		}
 	}
 	
-	public static void d(
-			String tag,
-			String msg) {
+	public static void d(String tag, String msg) {
 		if (DEBUG) {
 			Log.d(tag, msg);
 		}
 	}
 	
-	public static void e(
-			String tag,
-			String msg,
-			Throwable tr) {
+	public static void e(String tag, String msg, Throwable tr) {
 		if (DEBUG) {
 			Log.e(tag, msg, tr);
 		}
 	}
 	
-	public static void v(
-			String format,
-			Object... args) {
+	public static void v(String format, Object... args) {
 		if (DEBUG) {
 			Log.v(TAG, buildMessage(format, args));
 		}
 	}
 	
-	public static void d(
-			String format,
-			Object... args) {
+	public static void d(String format, Object... args) {
 		Log.d(TAG, buildMessage(format, args));
 	}
 	
-	public static void e(
-			String format,
-			Object... args) {
+	public static void e(String format, Object... args) {
 		Log.e(TAG, buildMessage(format, args));
 	}
 	
-	public static void e(
-			Throwable tr,
-			String format,
-			Object... args) {
+	public static void e(Throwable tr, String format, Object... args) {
 		Log.e(TAG, buildMessage(format, args), tr);
 	}
 	
-	public static void wtf(
-			String format,
-			Object... args) {
+	public static void wtf(String format, Object... args) {
 		Log.wtf(TAG, buildMessage(format, args));
 	}
 	
-	public static void wtf(
-			Throwable tr,
-			String format,
-			Object... args) {
+	public static void wtf(Throwable tr, String format, Object... args) {
 		Log.wtf(TAG, buildMessage(format, args), tr);
 	}
 	
@@ -102,9 +76,7 @@ public class FLog {
 	 * Formats the caller's provided message and prepends useful info like
 	 * calling thread ID and method name.
 	 */
-	private static String buildMessage(
-			String format,
-			Object... args) {
+	private static String buildMessage(String format, Object... args) {
 		String msg = (args == null) ? format : String.format(Locale.US, format, args);
 		StackTraceElement[] trace = new Throwable().fillInStackTrace().getStackTrace();
 		
@@ -154,9 +126,7 @@ public class FLog {
 		private boolean				mFinished	= false;
 		
 		/** Adds a marker to this log with the specified name. */
-		public synchronized void add(
-				String name,
-				long threadId) {
+		public synchronized void add(String name, long threadId) {
 			if (mFinished) {
 				throw new IllegalStateException("Marker added to finished log");
 			}
@@ -166,14 +136,12 @@ public class FLog {
 		
 		/**
 		 * Closes the log, dumping it to logcat if the time difference between
-		 * the first and last markers is greater than
-		 * {@link #MIN_DURATION_FOR_LOGGING_MS}.
+		 * the first and last markers is greater than {@link #MIN_DURATION_FOR_LOGGING_MS}.
 		 * 
 		 * @param header
 		 *            Header string to print above the marker log.
 		 */
-		public synchronized void finish(
-				String header) {
+		public synchronized void finish(String header) {
 			mFinished = true;
 			
 			long duration = getTotalDuration();

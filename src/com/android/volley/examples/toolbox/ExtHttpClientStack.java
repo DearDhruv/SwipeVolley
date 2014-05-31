@@ -56,17 +56,14 @@ public class ExtHttpClientStack implements HttpStack {
 		mClient = client;
 	}
 	
-	private static void addHeaders(
-			HttpUriRequest httpRequest,
-			Map<String, String> headers) {
+	private static void addHeaders(HttpUriRequest httpRequest, Map<String, String> headers) {
 		for (String key : headers.keySet()) {
 			httpRequest.setHeader(key, headers.get(key));
 		}
 	}
 	
 	@SuppressWarnings("unused")
-	private static List<NameValuePair> getPostParameterPairs(
-			Map<String, String> postParams) {
+	private static List<NameValuePair> getPostParameterPairs(Map<String, String> postParams) {
 		List<NameValuePair> result = new ArrayList<NameValuePair>(postParams.size());
 		for (String key : postParams.keySet()) {
 			result.add(new BasicNameValuePair(key, postParams.get(key)));
@@ -75,9 +72,9 @@ public class ExtHttpClientStack implements HttpStack {
 	}
 	
 	@Override
-	public org.apache.http.HttpResponse performRequest(
-			Request<?> request,
-			Map<String, String> additionalHeaders) throws IOException, AuthFailureError {
+	public org.apache.http.HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders)
+			throws IOException,
+			AuthFailureError {
 		
 		HttpUriRequest httpRequest = createHttpRequest(request, additionalHeaders);
 		addHeaders(httpRequest, additionalHeaders);
@@ -95,8 +92,9 @@ public class ExtHttpClientStack implements HttpStack {
 		return convertResponseNewToOld(resp);
 	}
 	
-	private org.apache.http.HttpResponse convertResponseNewToOld(
-			HttpResponse resp) throws IllegalStateException, IOException {
+	private org.apache.http.HttpResponse convertResponseNewToOld(HttpResponse resp)
+			throws IllegalStateException,
+			IOException {
 		
 		ProtocolVersion protocolVersion = new ProtocolVersion(resp.getProtocolVersion().getProtocol(), resp
 				.getProtocolVersion().getMajor(), resp.getProtocolVersion().getMinor());
@@ -116,8 +114,7 @@ public class ExtHttpClientStack implements HttpStack {
 		return response;
 	}
 	
-	private org.apache.http.HttpEntity convertEntityNewToOld(
-			HttpEntity ent) throws IllegalStateException, IOException {
+	private org.apache.http.HttpEntity convertEntityNewToOld(HttpEntity ent) throws IllegalStateException, IOException {
 		
 		BasicHttpEntity ret = new BasicHttpEntity();
 		if (ent != null) {
@@ -137,8 +134,7 @@ public class ExtHttpClientStack implements HttpStack {
 		return ret;
 	}
 	
-	private org.apache.http.Header convertheaderNewToOld(
-			Header header) {
+	private org.apache.http.Header convertheaderNewToOld(Header header) {
 		org.apache.http.Header ret = new BasicHeader(header.getName(), header.getValue());
 		return ret;
 	}
@@ -147,9 +143,8 @@ public class ExtHttpClientStack implements HttpStack {
 	 * Creates the appropriate subclass of HttpUriRequest for passed in request.
 	 */
 	@SuppressWarnings("deprecation")
-	/* protected */static HttpUriRequest createHttpRequest(
-			Request<?> request,
-			Map<String, String> additionalHeaders) throws AuthFailureError {
+	/* protected */static HttpUriRequest createHttpRequest(Request<?> request, Map<String, String> additionalHeaders)
+			throws AuthFailureError {
 		switch (request.getMethod()) {
 			case Method.DEPRECATED_GET_OR_POST: {
 				// This is the deprecated way that needs to be handled for
@@ -165,8 +160,7 @@ public class ExtHttpClientStack implements HttpStack {
 					entity = new ByteArrayEntity(postBody);
 					postRequest.setEntity(entity);
 					return postRequest;
-				}
-				else {
+				} else {
 					return new HttpGet(request.getUrl());
 				}
 			}
@@ -191,9 +185,8 @@ public class ExtHttpClientStack implements HttpStack {
 		}
 	}
 	
-	private static void setEntityIfNonEmptyBody(
-			HttpEntityEnclosingRequestBase httpRequest,
-			Request<?> request) throws AuthFailureError {
+	private static void setEntityIfNonEmptyBody(HttpEntityEnclosingRequestBase httpRequest, Request<?> request)
+			throws AuthFailureError {
 		byte[] body = request.getBody();
 		if (body != null) {
 			HttpEntity entity = new ByteArrayEntity(body);
@@ -207,8 +200,7 @@ public class ExtHttpClientStack implements HttpStack {
 	 * Overwrite in subclasses to augment the request.
 	 * </p>
 	 */
-	protected void onPrepareRequest(
-			HttpUriRequest request) throws IOException {
+	protected void onPrepareRequest(HttpUriRequest request) throws IOException {
 		// Nothing.
 	}
 }

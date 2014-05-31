@@ -32,8 +32,7 @@ public class MyVolley {
 		// no instances
 	}
 	
-	public static void init(
-			Context context) {
+	public static void init(Context context) {
 		mRequestQueue = Volley.newRequestQueue(context);
 		
 		int memClass = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
@@ -46,15 +45,14 @@ public class MyVolley {
 	public static RequestQueue getRequestQueue() {
 		if (mRequestQueue != null) {
 			return mRequestQueue;
-		}
-		else {
+		} else {
 			throw new IllegalStateException("RequestQueue not initialized");
 		}
 	}
 	
 	/**
-	 * Returns instance of ImageLoader initialized with {@see FakeImageCache}
-	 * which effectively means that no memory caching is used. This is useful
+	 * Returns instance of ImageLoader initialized with {@see FakeImageCache} which effectively
+	 * means that no memory caching is used. This is useful
 	 * for images that you know that will be show only once.
 	 * 
 	 * @return
@@ -62,8 +60,7 @@ public class MyVolley {
 	public static ImageLoader getImageLoader() {
 		if (mImageLoader != null) {
 			return mImageLoader;
-		}
-		else {
+		} else {
 			throw new IllegalStateException("ImageLoader not initialized");
 		}
 	}

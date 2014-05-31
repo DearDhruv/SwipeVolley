@@ -18,7 +18,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
  * Common class for requesting network query or uploading file.
  * 
  * @author DearDhruv
- * 
  */
 public class JSONRequestResponse {
 	
@@ -34,25 +33,17 @@ public class JSONRequestResponse {
 	private boolean			isFile	= false;
 	private String			file_path	= "", key = "";
 	
-	public void getResponse(
-			String url,
-			final int requestCode,
-			IParseListener mParseListener) {
+	public void getResponse(String url, final int requestCode, IParseListener mParseListener) {
 		getResponse(url, requestCode, mParseListener, null);
 	}
 	
-	public void getResponse(
-			String url,
-			final int requestCode,
-			IParseListener mParseListener,
-			Bundle params) {
+	public void getResponse(String url, final int requestCode, IParseListener mParseListener, Bundle params) {
 		this.listner = mParseListener;
 		this.reqCode = requestCode;
 		
 		Response.Listener<JSONObject> sListener = new Response.Listener<JSONObject>() {
 			@Override
-			public void onResponse(
-					JSONObject response) {
+			public void onResponse(JSONObject response) {
 				if (listner != null) {
 					listner.SuccessResponse(response, reqCode);
 				}
@@ -61,8 +52,7 @@ public class JSONRequestResponse {
 		
 		Response.ErrorListener eListener = new Response.ErrorListener() {
 			@Override
-			public void onErrorResponse(
-					VolleyError error) {
+			public void onErrorResponse(VolleyError error) {
 				if (listner != null) {
 					listner.ErrorResponse(error, reqCode);
 				}
@@ -72,14 +62,12 @@ public class JSONRequestResponse {
 		if (!isFile) {
 			JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, sListener, eListener);
 			MyVolley.getRequestQueue().add(jsObjRequest);
-		}
-		else {
+		} else {
 			if (file_path != null) {
 				File mFile = new File(file_path);
 				MultipartRequest multipartRequest = new MultipartRequest(url, eListener, sListener, key, mFile, params);
 				MyVolley.getRequestQueue().add(multipartRequest);
-			}
-			else {
+			} else {
 				throw new NullPointerException("File path is null");
 			}
 		}
@@ -96,9 +84,7 @@ public class JSONRequestResponse {
 	 * @param isFile
 	 *            the File to set
 	 */
-	public void setFile(
-			String param,
-			String path) {
+	public void setFile(String param, String path) {
 		if (path != null && param != null) {
 			key = param;
 			file_path = path;

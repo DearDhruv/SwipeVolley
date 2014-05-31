@@ -40,8 +40,8 @@ public class PoolingByteArrayOutputStream extends ByteArrayOutputStream {
 	}
 	
 	/**
-	 * Constructs a new {@code ByteArrayOutputStream} with a default size of
-	 * {@code size} bytes. If more than {@code size} bytes are written to this
+	 * Constructs a new {@code ByteArrayOutputStream} with a default size of {@code size} bytes. If
+	 * more than {@code size} bytes are written to this
 	 * instance, the underlying byte array will expand.
 	 * 
 	 * @param size
@@ -69,8 +69,7 @@ public class PoolingByteArrayOutputStream extends ByteArrayOutputStream {
 	 * Ensures there is enough space in the buffer for the given number of
 	 * additional bytes.
 	 */
-	private void expand(
-			int i) {
+	private void expand(int i) {
 		/* Can the buffer handle @i more bytes, if not expand it */
 		if (count + i <= buf.length) {
 			return;
@@ -82,17 +81,13 @@ public class PoolingByteArrayOutputStream extends ByteArrayOutputStream {
 	}
 	
 	@Override
-	public synchronized void write(
-			byte[] buffer,
-			int offset,
-			int len) {
+	public synchronized void write(byte[] buffer, int offset, int len) {
 		expand(len);
 		super.write(buffer, offset, len);
 	}
 	
 	@Override
-	public synchronized void write(
-			int oneByte) {
+	public synchronized void write(int oneByte) {
 		expand(1);
 		super.write(oneByte);
 	}

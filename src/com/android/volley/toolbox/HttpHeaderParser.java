@@ -35,8 +35,7 @@ public class HttpHeaderParser {
 	 * @return a cache entry for the given response, or null if the response is
 	 *         not cacheable.
 	 */
-	public static Cache.Entry parseCacheHeaders(
-			NetworkResponse response) {
+	public static Cache.Entry parseCacheHeaders(NetworkResponse response) {
 		long now = System.currentTimeMillis();
 		
 		Map<String, String> headers = response.headers;
@@ -63,15 +62,13 @@ public class HttpHeaderParser {
 				String token = tokens[i].trim();
 				if (token.equals("no-cache") || token.equals("no-store")) {
 					return null;
-				}
-				else if (token.startsWith("max-age=")) {
+				} else if (token.startsWith("max-age=")) {
 					try {
 						maxAge = Long.parseLong(token.substring(8));
 					}
 					catch (Exception e) {
 					}
-				}
-				else if (token.equals("must-revalidate") || token.equals("proxy-revalidate")) {
+				} else if (token.equals("must-revalidate") || token.equals("proxy-revalidate")) {
 					maxAge = 0;
 				}
 			}
@@ -89,8 +86,7 @@ public class HttpHeaderParser {
 		// is more restrictive.
 		if (hasCacheControl) {
 			softExpire = now + maxAge * 1000;
-		}
-		else if (serverDate > 0 && serverExpires >= serverDate) {
+		} else if (serverDate > 0 && serverExpires >= serverDate) {
 			// Default semantic for Expire header in HTTP specification is
 			// softExpire.
 			softExpire = now + (serverExpires - serverDate);
@@ -110,8 +106,7 @@ public class HttpHeaderParser {
 	/**
 	 * Parse date in RFC1123 format, and return its value as epoch
 	 */
-	public static long parseDateAsEpoch(
-			String dateStr) {
+	public static long parseDateAsEpoch(String dateStr) {
 		try {
 			// Parse date in RFC1123 format if this header contains one
 			return DateUtils.parseDate(dateStr).getTime();
@@ -126,8 +121,7 @@ public class HttpHeaderParser {
 	 * Returns the charset specified in the Content-Type of this header, or the
 	 * HTTP default (ISO-8859-1) if none can be found.
 	 */
-	public static String parseCharset(
-			Map<String, String> headers) {
+	public static String parseCharset(Map<String, String> headers) {
 		String contentType = headers.get(HTTP.CONTENT_TYPE);
 		if (contentType != null) {
 			String[] params = contentType.split(";");

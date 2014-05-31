@@ -11,8 +11,7 @@ public class ItemDetail implements Serializable {
 		return imgUrl;
 	}
 	
-	public void setImgUrl(
-			String imgUrl) {
+	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
 	
@@ -20,8 +19,7 @@ public class ItemDetail implements Serializable {
 		return name;
 	}
 	
-	public void setName(
-			String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 }

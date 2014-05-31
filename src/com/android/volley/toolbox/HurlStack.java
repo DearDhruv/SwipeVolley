@@ -55,8 +55,7 @@ public class HurlStack implements HttpStack {
 		 * Returns a URL to use instead of the provided one, or null to indicate
 		 * this URL should not be used at all.
 		 */
-		public String rewriteUrl(
-				String originalUrl);
+		public String rewriteUrl(String originalUrl);
 	}
 	
 	private final UrlRewriter		mUrlRewriter;
@@ -86,9 +85,9 @@ public class HurlStack implements HttpStack {
 	}
 	
 	@Override
-	public HttpResponse performRequest(
-			Request<?> request,
-			Map<String, String> additionalHeaders) throws IOException, AuthFailureError {
+	public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders)
+			throws IOException,
+			AuthFailureError {
 		String url = request.getUrl();
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.putAll(request.getHeaders());
@@ -130,14 +129,12 @@ public class HurlStack implements HttpStack {
 	}
 	
 	/**
-	 * Initializes an {@link HttpEntity} from the given
-	 * {@link HttpURLConnection}.
+	 * Initializes an {@link HttpEntity} from the given {@link HttpURLConnection}.
 	 * 
 	 * @param connection
 	 * @return an HttpEntity populated with data from <code>connection</code>.
 	 */
-	private static HttpEntity entityFromConnection(
-			HttpURLConnection connection) {
+	private static HttpEntity entityFromConnection(HttpURLConnection connection) {
 		BasicHttpEntity entity = new BasicHttpEntity();
 		InputStream inputStream;
 		try {
@@ -156,8 +153,7 @@ public class HurlStack implements HttpStack {
 	/**
 	 * Create an {@link HttpURLConnection} for the specified {@code url}.
 	 */
-	protected HttpURLConnection createConnection(
-			URL url) throws IOException {
+	protected HttpURLConnection createConnection(URL url) throws IOException {
 		return (HttpURLConnection) url.openConnection();
 	}
 	
@@ -168,9 +164,7 @@ public class HurlStack implements HttpStack {
 	 * @return an open connection
 	 * @throws IOException
 	 */
-	private HttpURLConnection openConnection(
-			URL url,
-			Request<?> request) throws IOException {
+	private HttpURLConnection openConnection(URL url, Request<?> request) throws IOException {
 		HttpURLConnection connection = createConnection(url);
 		
 		int timeoutMs = request.getTimeoutMs();
@@ -188,9 +182,9 @@ public class HurlStack implements HttpStack {
 	}
 	
 	@SuppressWarnings("deprecation")
-	/* package */static void setConnectionParametersForRequest(
-			HttpURLConnection connection,
-			Request<?> request) throws IOException, AuthFailureError {
+	/* package */static void setConnectionParametersForRequest(HttpURLConnection connection, Request<?> request)
+			throws IOException,
+			AuthFailureError {
 		switch (request.getMethod()) {
 			case Method.DEPRECATED_GET_OR_POST:
 				// This is the deprecated way that needs to be handled for
@@ -235,9 +229,9 @@ public class HurlStack implements HttpStack {
 		}
 	}
 	
-	private static void addBodyIfExists(
-			HttpURLConnection connection,
-			Request<?> request) throws IOException, AuthFailureError {
+	private static void addBodyIfExists(HttpURLConnection connection, Request<?> request)
+			throws IOException,
+			AuthFailureError {
 		byte[] body = request.getBody();
 		if (body != null) {
 			connection.setDoOutput(true);

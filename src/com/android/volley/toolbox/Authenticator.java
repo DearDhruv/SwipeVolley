@@ -30,6 +30,5 @@ public interface Authenticator {
 	/**
 	 * Invalidates the provided auth token.
 	 */
-	public void invalidateAuthToken(
-			String authToken);
+	public void invalidateAuthToken(String authToken);
 }

@@ -16,8 +16,7 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 	ViewPager				mViewPager;
 	
 	@Override
-	protected void onCreate(
-			Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
@@ -29,8 +28,7 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(
-			Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
@@ -50,8 +48,7 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 		}
 		
 		@Override
-		public Fragment getItem(
-				int position) {
+		public Fragment getItem(int position) {
 			Fragment fragment = null;
 			if (position == 1) {
 				fragment = new ImagePreviewFrag(mCallback);
@@ -81,8 +78,7 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 		}
 		
 		@Override
-		public CharSequence getPageTitle(
-				int position) {
+		public CharSequence getPageTitle(int position) {
 			switch (position) {
 				case 0:
 					return "Image List";
@@ -96,12 +92,10 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 	IUpdateImageView	mCallback	= null;
 	
 	public interface IUpdateImageView {
-		public void updateImagePreview(
-				ItemDetail sharedItem);
+		public void updateImagePreview(ItemDetail sharedItem);
 	}
 	
-	public void shareItem(
-			final ItemDetail sharedItem) {
+	public void shareItem(final ItemDetail sharedItem) {
 		// arg = new Bundle();
 		// arg.putSerializable("item", sharedItem);
 		

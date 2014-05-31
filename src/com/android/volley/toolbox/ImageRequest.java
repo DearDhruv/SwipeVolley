@@ -101,11 +101,7 @@ public class ImageRequest extends Request<Bitmap> {
 	 * @param actualSecondary
 	 *            Actual size of the secondary dimension
 	 */
-	private static int getResizedDimension(
-			int maxPrimary,
-			int maxSecondary,
-			int actualPrimary,
-			int actualSecondary) {
+	private static int getResizedDimension(int maxPrimary, int maxSecondary, int actualPrimary, int actualSecondary) {
 		// If no dominant value at all, just return the actual.
 		if (maxPrimary == 0 && maxSecondary == 0) {
 			return actualPrimary;
@@ -131,8 +127,7 @@ public class ImageRequest extends Request<Bitmap> {
 	}
 	
 	@Override
-	protected Response<Bitmap> parseNetworkResponse(
-			NetworkResponse response) {
+	protected Response<Bitmap> parseNetworkResponse(NetworkResponse response) {
 		// Serialize all decode on a global lock to reduce concurrent heap
 		// usage.
 		synchronized (sDecodeLock) {
@@ -149,16 +144,14 @@ public class ImageRequest extends Request<Bitmap> {
 	/**
 	 * The real guts of parseNetworkResponse. Broken out for readability.
 	 */
-	private Response<Bitmap> doParse(
-			NetworkResponse response) {
+	private Response<Bitmap> doParse(NetworkResponse response) {
 		byte[] data = response.data;
 		BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
 		Bitmap bitmap = null;
 		if (mMaxWidth == 0 && mMaxHeight == 0) {
 			decodeOptions.inPreferredConfig = mDecodeConfig;
 			bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, decodeOptions);
-		}
-		else {
+		} else {
 			// If we have to resize this image, first get the natural bounds.
 			decodeOptions.inJustDecodeBounds = true;
 			BitmapFactory.decodeByteArray(data, 0, data.length, decodeOptions);
@@ -182,23 +175,20 @@ public class ImageRequest extends Request<Bitmap> {
 			if (tempBitmap != null && (tempBitmap.getWidth() > desiredWidth || tempBitmap.getHeight() > desiredHeight)) {
 				bitmap = Bitmap.createScaledBitmap(tempBitmap, desiredWidth, desiredHeight, true);
 				tempBitmap.recycle();
-			}
-			else {
+			} else {
 				bitmap = tempBitmap;
 			}
 		}
 		
 		if (bitmap == null) {
 			return Response.error(new ParseError());
-		}
-		else {
+		} else {
 			return Response.success(bitmap, HttpHeaderParser.parseCacheHeaders(response));
 		}
 	}
 	
 	@Override
-	protected void deliverResponse(
-			Bitmap response) {
+	protected void deliverResponse(Bitmap response) {
 		mListener.onResponse(response);
 	}
 	
@@ -216,11 +206,7 @@ public class ImageRequest extends Request<Bitmap> {
 	 *            Desired height of the bitmap
 	 */
 	// Visible for testing.
-	static int findBestSampleSize(
-			int actualWidth,
-			int actualHeight,
-			int desiredWidth,
-			int desiredHeight) {
+	static int findBestSampleSize(int actualWidth, int actualHeight, int desiredWidth, int desiredHeight) {
 		double wr = (double) actualWidth / desiredWidth;
 		double hr = (double) actualHeight / desiredHeight;
 		double ratio = Math.min(wr, hr);

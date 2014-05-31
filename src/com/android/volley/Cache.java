@@ -27,8 +27,7 @@ public interface Cache {
 	 *            Cache key
 	 * @return An {@link Entry} or null in the event of a cache miss
 	 */
-	public Entry get(
-			String key);
+	public Entry get(String key);
 	
 	/**
 	 * Adds or replaces an entry to the cache.
@@ -38,9 +37,7 @@ public interface Cache {
 	 * @param entry
 	 *            Data to store and metadata for cache coherency, TTL, etc.
 	 */
-	public void put(
-			String key,
-			Entry entry);
+	public void put(String key, Entry entry);
 	
 	/**
 	 * Performs any potentially long-running actions needed to initialize the
@@ -56,9 +53,7 @@ public interface Cache {
 	 * @param fullExpire
 	 *            True to fully expire the entry, false to soft expire
 	 */
-	public void invalidate(
-			String key,
-			boolean fullExpire);
+	public void invalidate(String key, boolean fullExpire);
 	
 	/**
 	 * Removes an entry from the cache.
@@ -66,8 +61,7 @@ public interface Cache {
 	 * @param key
 	 *            Cache key
 	 */
-	public void remove(
-			String key);
+	public void remove(String key);
 	
 	/**
 	 * Empties the cache.

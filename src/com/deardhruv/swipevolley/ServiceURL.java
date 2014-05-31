@@ -9,7 +9,6 @@ import android.os.Bundle;
 
 /**
  * @author DearDhruv
- * 
  */
 public class ServiceURL {
 	
@@ -18,8 +17,7 @@ public class ServiceURL {
 	public static final String	mainURL		= "https://raw.github.com/DearDhruv/SwipeVolley/master/json_res";
 	
 	@SuppressWarnings("deprecation")
-	public static String encodeGETUrl(
-			Bundle parameters) {
+	public static String encodeGETUrl(Bundle parameters) {
 		StringBuilder sb = new StringBuilder();
 		
 		if (parameters != null && parameters.size() > 0) {
@@ -29,8 +27,7 @@ public class ServiceURL {
 					
 					if (first) {
 						first = false;
-					}
-					else {
+					} else {
 						sb.append("&");
 					}
 					String value = "";
@@ -51,9 +48,7 @@ public class ServiceURL {
 		return sb.toString();
 	}
 	
-	public static String encodeUrl(
-			String url,
-			Bundle mParams) {
+	public static String encodeUrl(String url, Bundle mParams) {
 		return url + encodeGETUrl(mParams);
 	}
 	

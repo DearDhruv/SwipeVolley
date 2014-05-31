@@ -99,8 +99,7 @@ public class AndroidAuthenticator implements Authenticator {
 	}
 	
 	@Override
-	public void invalidateAuthToken(
-			String authToken) {
+	public void invalidateAuthToken(String authToken) {
 		AccountManager.get(mContext).invalidateAuthToken(mAccount.type, authToken);
 	}
 }

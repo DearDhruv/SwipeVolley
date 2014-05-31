@@ -28,8 +28,8 @@ import android.os.Looper;
 import com.android.volley.examples.toolbox.updated.FLog;
 
 /**
- * A request dispatch queue with a thread pool of dispatchers. Calling
- * {@link #add(Request)} will enqueue the given Request for dispatch, resolving
+ * A request dispatch queue with a thread pool of dispatchers. Calling {@link #add(Request)} will
+ * enqueue the given Request for dispatch, resolving
  * from either cache or network on a worker thread, and then delivering a parsed
  * response on the main thread.
  */
@@ -46,11 +46,10 @@ public class RequestQueue {
 	 * Staging area for requests that already have a duplicate request in
 	 * flight.
 	 * <ul>
-	 * <li>containsKey(cacheKey) indicates that there is a request in flight for
-	 * the given cache key.</li>
-	 * <li>get(cacheKey) returns waiting requests for the given cache key. The
-	 * in flight request is <em>not</em> contained in that list. Is null if no
-	 * requests are staged.</li>
+	 * <li>containsKey(cacheKey) indicates that there is a request in flight for the given cache
+	 * key.</li>
+	 * <li>get(cacheKey) returns waiting requests for the given cache key. The in flight request is
+	 * <em>not</em> contained in that list. Is null if no requests are staged.</li>
 	 * </ul>
 	 */
 	private final Map<String, Queue<Request>>		mWaitingRequests					= new HashMap<String, Queue<Request>>();
@@ -87,8 +86,7 @@ public class RequestQueue {
 	private CacheDispatcher							mCacheDispatcher;
 	
 	/**
-	 * Creates the worker pool. Processing will not begin until {@link #start()}
-	 * is called.
+	 * Creates the worker pool. Processing will not begin until {@link #start()} is called.
 	 * 
 	 * @param cache
 	 *            A Cache to use for persisting responses to disk
@@ -107,8 +105,7 @@ public class RequestQueue {
 	}
 	
 	/**
-	 * Creates the worker pool. Processing will not begin until {@link #start()}
-	 * is called.
+	 * Creates the worker pool. Processing will not begin until {@link #start()} is called.
 	 * 
 	 * @param cache
 	 *            A Cache to use for persisting responses to disk
@@ -122,8 +119,7 @@ public class RequestQueue {
 	}
 	
 	/**
-	 * Creates the worker pool. Processing will not begin until {@link #start()}
-	 * is called.
+	 * Creates the worker pool. Processing will not begin until {@link #start()} is called.
 	 * 
 	 * @param cache
 	 *            A Cache to use for persisting responses to disk
@@ -185,8 +181,7 @@ public class RequestQueue {
 	 * {@link RequestQueue#cancelAll(RequestFilter)}.
 	 */
 	public interface RequestFilter {
-		public boolean apply(
-				Request<?> request);
+		public boolean apply(Request<?> request);
 	}
 	
 	/**
@@ -195,8 +190,7 @@ public class RequestQueue {
 	 * @param filter
 	 *            The filtering function to use
 	 */
-	public void cancelAll(
-			RequestFilter filter) {
+	public void cancelAll(RequestFilter filter) {
 		synchronized (mCurrentRequests) {
 			for (Request<?> request : mCurrentRequests) {
 				if (filter.apply(request)) {
@@ -210,15 +204,13 @@ public class RequestQueue {
 	 * Cancels all requests in this queue with the given tag. Tag must be
 	 * non-null and equality is by identity.
 	 */
-	public void cancelAll(
-			final Object tag) {
+	public void cancelAll(final Object tag) {
 		if (tag == null) {
 			throw new IllegalArgumentException("Cannot cancelAll with a null tag");
 		}
 		cancelAll(new RequestFilter() {
 			@Override
-			public boolean apply(
-					Request<?> request) {
+			public boolean apply(Request<?> request) {
 				return request.getTag() == tag;
 			}
 		});
@@ -231,8 +223,7 @@ public class RequestQueue {
 	 *            The request to service
 	 * @return The passed-in request
 	 */
-	public Request add(
-			Request request) {
+	public Request add(Request request) {
 		// Tag the request as belonging to this queue and add it to the set of
 		// current requests.
 		request.setRequestQueue(this);
@@ -266,8 +257,7 @@ public class RequestQueue {
 				if (FLog.DEBUG) {
 					FLog.v("Request for cacheKey=%s is in flight, putting on hold.", cacheKey);
 				}
-			}
-			else {
+			} else {
 				// Insert 'null' queue for this cacheKey, indicating there is
 				// now a request in
 				// flight.
@@ -286,8 +276,7 @@ public class RequestQueue {
 	 * <code>request.shouldCache()</code>.
 	 * </p>
 	 */
-	void finish(
-			Request request) {
+	void finish(Request request) {
 		// Remove from the set of requests currently being processed.
 		synchronized (mCurrentRequests) {
 			mCurrentRequests.remove(request);

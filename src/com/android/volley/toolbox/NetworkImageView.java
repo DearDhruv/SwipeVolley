@@ -61,8 +61,8 @@ public class NetworkImageView extends ImageView {
 	/**
 	 * Sets URL of the image that should be loaded into this view. Note that
 	 * calling this will immediately either set the cached image (if available)
-	 * or the default image specified by
-	 * {@link NetworkImageView#setDefaultImageResId(int)} on the view. NOTE: If
+	 * or the default image specified by {@link NetworkImageView#setDefaultImageResId(int)} on the
+	 * view. NOTE: If
 	 * applicable, {@link NetworkImageView#setDefaultImageResId(int)} and
 	 * {@link NetworkImageView#setErrorImageResId(int)} should be called prior
 	 * to calling this function.
@@ -72,9 +72,7 @@ public class NetworkImageView extends ImageView {
 	 * @param imageLoader
 	 *            ImageLoader that will be used to make the request.
 	 */
-	public void setImageUrl(
-			String url,
-			ImageLoader imageLoader) {
+	public void setImageUrl(String url, ImageLoader imageLoader) {
 		mUrl = url;
 		mImageLoader = imageLoader;
 		// The URL has potentially changed. See if we need to load it.
@@ -85,8 +83,7 @@ public class NetworkImageView extends ImageView {
 	 * Sets the default image resource ID to be used for this view until the
 	 * attempt to load it completes.
 	 */
-	public void setDefaultImageResId(
-			int defaultImage) {
+	public void setDefaultImageResId(int defaultImage) {
 		mDefaultImageId = defaultImage;
 	}
 	
@@ -94,8 +91,7 @@ public class NetworkImageView extends ImageView {
 	 * Sets the error image resource ID to be used for this view in the event
 	 * that the image requested fails to load.
 	 */
-	public void setErrorImageResId(
-			int errorImage) {
+	public void setErrorImageResId(int errorImage) {
 		mErrorImageId = errorImage;
 	}
 	
@@ -105,8 +101,7 @@ public class NetworkImageView extends ImageView {
 	 * @param isInLayoutPass
 	 *            True if this was invoked from a layout pass, false otherwise.
 	 */
-	private void loadImageIfNecessary(
-			final boolean isInLayoutPass) {
+	private void loadImageIfNecessary(final boolean isInLayoutPass) {
 		int width = getWidth();
 		int height = getHeight();
 		
@@ -137,8 +132,7 @@ public class NetworkImageView extends ImageView {
 			if (mImageContainer.getRequestUrl().equals(mUrl)) {
 				// if the request is from the same URL, return.
 				return;
-			}
-			else {
+			} else {
 				// if there is a pre-existing request, cancel it if it's
 				// fetching a different URL.
 				mImageContainer.cancelRequest();
@@ -151,18 +145,14 @@ public class NetworkImageView extends ImageView {
 		// from the network.
 		ImageContainer newContainer = mImageLoader.get(mUrl, new ImageListener() {
 			@Override
-			public void onErrorResponse(
-					VolleyError error) {
+			public void onErrorResponse(VolleyError error) {
 				if (mErrorImageId != 0) {
 					setImageResource(mErrorImageId);
 				}
 			}
 			
 			@Override
-			public void onResponse(
-					final ImageContainer response,
-					boolean isImmediate,
-					boolean shouldAnimate) {
+			public void onResponse(final ImageContainer response, boolean isImmediate, boolean shouldAnimate) {
 				
 				// If this was an immediate response that was delivered inside
 				// of a layout
@@ -183,8 +173,7 @@ public class NetworkImageView extends ImageView {
 				
 				if (response.getBitmap() != null) {
 					setImageBitmap(response.getBitmap());
-				}
-				else if (mDefaultImageId != 0) {
+				} else if (mDefaultImageId != 0) {
 					setImageResource(mDefaultImageId);
 				}
 			}
@@ -195,12 +184,7 @@ public class NetworkImageView extends ImageView {
 	}
 	
 	@Override
-	protected void onLayout(
-			boolean changed,
-			int left,
-			int top,
-			int right,
-			int bottom) {
+	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
 		loadImageIfNecessary(true);
 	}

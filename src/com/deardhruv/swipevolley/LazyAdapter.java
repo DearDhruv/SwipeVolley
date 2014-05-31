@@ -30,20 +30,15 @@ public class LazyAdapter extends BaseAdapter {
 		return mList.size();
 	}
 	
-	public Object getItem(
-			int position) {
+	public Object getItem(int position) {
 		return mList.get(position);
 	}
 	
-	public long getItemId(
-			int position) {
+	public long getItemId(int position) {
 		return position;
 	}
 	
-	public View getView(
-			int position,
-			View convertView,
-			ViewGroup parent) {
+	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.row_listview_item, null);
@@ -51,8 +46,7 @@ public class LazyAdapter extends BaseAdapter {
 			holder.text = (TextView) convertView.findViewById(R.id.text);
 			holder.image = (NetworkImageView) convertView.findViewById(R.id.image);
 			convertView.setTag(holder);
-		}
-		else {
+		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		holder.image.setDefaultImageResId(R.drawable.ic_launcher);

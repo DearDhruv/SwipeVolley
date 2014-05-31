@@ -42,8 +42,8 @@ public class NetworkDispatcher extends Thread {
 	private volatile boolean				mQuit	= false;
 	
 	/**
-	 * Creates a new network dispatcher thread. You must call {@link #start()}
-	 * in order to begin processing.
+	 * Creates a new network dispatcher thread. You must call {@link #start()} in order to begin
+	 * processing.
 	 * 
 	 * @param queue
 	 *            Queue of incoming requests for triage
@@ -140,9 +140,7 @@ public class NetworkDispatcher extends Thread {
 		}
 	}
 	
-	private void parseAndDeliverNetworkError(
-			Request<?> request,
-			VolleyError error) {
+	private void parseAndDeliverNetworkError(Request<?> request, VolleyError error) {
 		error = request.parseNetworkError(error);
 		mDelivery.postError(request, error);
 	}

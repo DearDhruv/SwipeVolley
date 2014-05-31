@@ -37,18 +37,14 @@ public class ImageListFrag extends Fragment implements IParseListener, OnItemCli
 	}
 	
 	@Override
-	public View onCreateView(
-			LayoutInflater inflater,
-			ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		fragView = inflater.inflate(R.layout.fragment_main_dummy, container, false);
 		list = (ListView) fragView.findViewById(R.id.listView1);
 		return fragView;
 	}
 	
 	@Override
-	public void onActivityCreated(
-			Bundle savedInstanceState) {
+	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		getImages(getActivity());
 	}
@@ -61,8 +57,7 @@ public class ImageListFrag extends Fragment implements IParseListener, OnItemCli
 	
 	boolean	isImageChanged	= false;
 	
-	void getImages(
-			Context mContext) {
+	void getImages(Context mContext) {
 		pd = ProgressDialog.show(mContext, "Please wait", "getting images...");
 		if (!pd.isShowing()) {
 			pd.show();
@@ -79,16 +74,13 @@ public class ImageListFrag extends Fragment implements IParseListener, OnItemCli
 			// }
 			// mResponse.getResponse(ServiceURL.mainURL, CODE_IMG_LIST, this,
 			// parms);
-		}
-		else {
+		} else {
 			mResponse.getResponse(ServiceURL.encodeUrl(ServiceURL.mainURL, parms), CODE_IMG_LIST, this);
 		}
 	}
 	
 	@Override
-	public void ErrorResponse(
-			VolleyError error,
-			int requestCode) {
+	public void ErrorResponse(VolleyError error, int requestCode) {
 		if (pd.isShowing()) {
 			pd.dismiss();
 		}
@@ -100,9 +92,7 @@ public class ImageListFrag extends Fragment implements IParseListener, OnItemCli
 	ArrayList<ItemDetail>	mList	= null;
 	
 	@Override
-	public void SuccessResponse(
-			JSONObject response,
-			int requestCode) {
+	public void SuccessResponse(JSONObject response, int requestCode) {
 		if (pd.isShowing()) {
 			pd.dismiss();
 		}
@@ -138,15 +128,13 @@ public class ImageListFrag extends Fragment implements IParseListener, OnItemCli
 	
 	public interface ShareViewItem {
 		// Interface method you will call from this fragment
-		public void shareItem(
-				ItemDetail viewItem);
+		public void shareItem(ItemDetail viewItem);
 	}
 	
 	ShareViewItem	mCallback	= null;
 	
 	@Override
-	public void onAttach(
-			Activity activity) {
+	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		
 		try {
@@ -157,8 +145,7 @@ public class ImageListFrag extends Fragment implements IParseListener, OnItemCli
 		}
 	}
 	
-	public void changeImagePreview(
-			ItemDetail itemDetail) {
+	public void changeImagePreview(ItemDetail itemDetail) {
 		
 		// Then use the interface callback to tell activity item is shared
 		if (mCallback != null) {
@@ -167,11 +154,7 @@ public class ImageListFrag extends Fragment implements IParseListener, OnItemCli
 	}
 	
 	@Override
-	public void onItemClick(
-			AdapterView<?> arg0,
-			View arg1,
-			int pos,
-			long arg3) {
+	public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long arg3) {
 		if (mList != null) {
 			changeImagePreview(mList.get(pos));
 		}

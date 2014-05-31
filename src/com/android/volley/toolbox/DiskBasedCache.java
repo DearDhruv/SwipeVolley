@@ -106,8 +106,7 @@ public class DiskBasedCache implements Cache {
 	 * otherwise.
 	 */
 	@Override
-	public synchronized Entry get(
-			String key) {
+	public synchronized Entry get(String key) {
 		CacheHeader entry = mEntries.get(key);
 		// if the entry does not exist, return.
 		if (entry == null) {
@@ -190,9 +189,7 @@ public class DiskBasedCache implements Cache {
 	 *            True to fully expire the entry, false to soft expire
 	 */
 	@Override
-	public synchronized void invalidate(
-			String key,
-			boolean fullExpire) {
+	public synchronized void invalidate(String key, boolean fullExpire) {
 		Entry entry = get(key);
 		if (entry != null) {
 			entry.softTtl = 0;
@@ -208,9 +205,7 @@ public class DiskBasedCache implements Cache {
 	 * Puts the entry with the specified key into the cache.
 	 */
 	@Override
-	public synchronized void put(
-			String key,
-			Entry entry) {
+	public synchronized void put(String key, Entry entry) {
 		pruneIfNeeded(entry.data.length);
 		File file = getFileForKey(key);
 		try {
@@ -234,8 +229,7 @@ public class DiskBasedCache implements Cache {
 	 * Removes the specified key from the cache if it exists.
 	 */
 	@Override
-	public synchronized void remove(
-			String key) {
+	public synchronized void remove(String key) {
 		boolean deleted = getFileForKey(key).delete();
 		removeEntry(key);
 		if (!deleted) {
@@ -250,8 +244,7 @@ public class DiskBasedCache implements Cache {
 	 *            The key to generate a file name for.
 	 * @return A pseudo-unique filename.
 	 */
-	private String getFilenameForKey(
-			String key) {
+	private String getFilenameForKey(String key) {
 		int firstHalfLength = key.length() / 2;
 		String localFilename = String.valueOf(key.substring(0, firstHalfLength).hashCode());
 		localFilename += String.valueOf(key.substring(firstHalfLength).hashCode());
@@ -261,8 +254,7 @@ public class DiskBasedCache implements Cache {
 	/**
 	 * Returns a file object for the given cache key.
 	 */
-	public File getFileForKey(
-			String key) {
+	public File getFileForKey(String key) {
 		return new File(mRootDirectory, getFilenameForKey(key));
 	}
 	
@@ -272,8 +264,7 @@ public class DiskBasedCache implements Cache {
 	 * @param neededSpace
 	 *            The amount of bytes we are trying to fit into the cache.
 	 */
-	private void pruneIfNeeded(
-			int neededSpace) {
+	private void pruneIfNeeded(int neededSpace) {
 		if ((mTotalSize + neededSpace) < mMaxCacheSizeInBytes) {
 			return;
 		}
@@ -292,8 +283,7 @@ public class DiskBasedCache implements Cache {
 			boolean deleted = getFileForKey(e.key).delete();
 			if (deleted) {
 				mTotalSize -= e.size;
-			}
-			else {
+			} else {
 				FLog.d("Could not delete cache entry for key=%s, filename=%s", e.key, getFilenameForKey(e.key));
 			}
 			iterator.remove();
@@ -318,13 +308,10 @@ public class DiskBasedCache implements Cache {
 	 * @param entry
 	 *            The entry to cache.
 	 */
-	private void putEntry(
-			String key,
-			CacheHeader entry) {
+	private void putEntry(String key, CacheHeader entry) {
 		if (!mEntries.containsKey(key)) {
 			mTotalSize += entry.size;
-		}
-		else {
+		} else {
 			CacheHeader oldEntry = mEntries.get(key);
 			mTotalSize += (entry.size - oldEntry.size);
 		}
@@ -334,8 +321,7 @@ public class DiskBasedCache implements Cache {
 	/**
 	 * Removes the entry identified by 'key' from the cache.
 	 */
-	private void removeEntry(
-			String key) {
+	private void removeEntry(String key) {
 		CacheHeader entry = mEntries.get(key);
 		if (entry != null) {
 			mTotalSize -= entry.size;
@@ -346,9 +332,7 @@ public class DiskBasedCache implements Cache {
 	/**
 	 * Reads the contents of an InputStream into a byte[].
 	 */
-	private static byte[] streamToBytes(
-			InputStream in,
-			int length) throws IOException {
+	private static byte[] streamToBytes(InputStream in, int length) throws IOException {
 		byte[] bytes = new byte[length];
 		int count;
 		int pos = 0;
@@ -418,8 +402,7 @@ public class DiskBasedCache implements Cache {
 		 *            The InputStream to read from.
 		 * @throws IOException
 		 */
-		public static CacheHeader readHeader(
-				InputStream is) throws IOException {
+		public static CacheHeader readHeader(InputStream is) throws IOException {
 			CacheHeader entry = new CacheHeader();
 			ObjectInputStream ois = new ObjectInputStream(is);
 			int version = ois.readByte();
@@ -442,8 +425,7 @@ public class DiskBasedCache implements Cache {
 		/**
 		 * Creates a cache entry for the specified data.
 		 */
-		public Entry toCacheEntry(
-				byte[] data) {
+		public Entry toCacheEntry(byte[] data) {
 			Entry e = new Entry();
 			e.data = data;
 			e.etag = etag;
@@ -458,8 +440,7 @@ public class DiskBasedCache implements Cache {
 		 * Writes the contents of this CacheHeader to the specified
 		 * OutputStream.
 		 */
-		public boolean writeHeader(
-				OutputStream os) {
+		public boolean writeHeader(OutputStream os) {
 			try {
 				ObjectOutputStream oos = new ObjectOutputStream(os);
 				oos.writeByte(CACHE_VERSION);
@@ -481,28 +462,23 @@ public class DiskBasedCache implements Cache {
 		/**
 		 * Writes all entries of {@code map} into {@code oos}.
 		 */
-		private static void writeStringStringMap(
-				Map<String, String> map,
-				ObjectOutputStream oos) throws IOException {
+		private static void writeStringStringMap(Map<String, String> map, ObjectOutputStream oos) throws IOException {
 			if (map != null) {
 				oos.writeInt(map.size());
 				for (Map.Entry<String, String> entry : map.entrySet()) {
 					oos.writeUTF(entry.getKey());
 					oos.writeUTF(entry.getValue());
 				}
-			}
-			else {
+			} else {
 				oos.writeInt(0);
 			}
 		}
 		
 		/**
-		 * @return a string to string map which contains the entries read from
-		 *         {@code ois} previously written by
-		 *         {@link #writeStringStringMap}
+		 * @return a string to string map which contains the entries read from {@code ois}
+		 *         previously written by {@link #writeStringStringMap}
 		 */
-		private static Map<String, String> readStringStringMap(
-				ObjectInputStream ois) throws IOException {
+		private static Map<String, String> readStringStringMap(ObjectInputStream ois) throws IOException {
 			int size = ois.readInt();
 			Map<String, String> result = (size == 0) ? Collections.<String, String> emptyMap()
 					: new HashMap<String, String>(size);
@@ -532,10 +508,7 @@ public class DiskBasedCache implements Cache {
 		}
 		
 		@Override
-		public int read(
-				byte[] buffer,
-				int offset,
-				int count) throws IOException {
+		public int read(byte[] buffer, int offset, int count) throws IOException {
 			int result = super.read(buffer, offset, count);
 			if (result != -1) {
 				bytesRead += result;

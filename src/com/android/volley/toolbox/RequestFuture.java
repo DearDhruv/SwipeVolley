@@ -64,14 +64,12 @@ public class RequestFuture<T> implements Future<T>, Response.Listener<T>, Respon
 	private RequestFuture() {
 	}
 	
-	public void setRequest(
-			Request<?> request) {
+	public void setRequest(Request<?> request) {
 		mRequest = request;
 	}
 	
 	@Override
-	public synchronized boolean cancel(
-			boolean mayInterruptIfRunning) {
+	public synchronized boolean cancel(boolean mayInterruptIfRunning) {
 		if (mRequest == null) {
 			return false;
 		}
@@ -79,8 +77,7 @@ public class RequestFuture<T> implements Future<T>, Response.Listener<T>, Respon
 		if (!isDone()) {
 			mRequest.cancel();
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -96,14 +93,11 @@ public class RequestFuture<T> implements Future<T>, Response.Listener<T>, Respon
 	}
 	
 	@Override
-	public T get(
-			long timeout,
-			TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+	public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
 		return doGet(TimeUnit.MILLISECONDS.convert(timeout, unit));
 	}
 	
-	private synchronized T doGet(
-			Long timeoutMs) throws InterruptedException, ExecutionException, TimeoutException {
+	private synchronized T doGet(Long timeoutMs) throws InterruptedException, ExecutionException, TimeoutException {
 		if (mException != null) {
 			throw new ExecutionException(mException);
 		}
@@ -114,8 +108,7 @@ public class RequestFuture<T> implements Future<T>, Response.Listener<T>, Respon
 		
 		if (timeoutMs == null) {
 			wait(0);
-		}
-		else if (timeoutMs > 0) {
+		} else if (timeoutMs > 0) {
 			wait(timeoutMs);
 		}
 		
@@ -144,16 +137,14 @@ public class RequestFuture<T> implements Future<T>, Response.Listener<T>, Respon
 	}
 	
 	@Override
-	public synchronized void onResponse(
-			T response) {
+	public synchronized void onResponse(T response) {
 		mResultReceived = true;
 		mResult = response;
 		notifyAll();
 	}
 	
 	@Override
-	public synchronized void onErrorResponse(
-			VolleyError error) {
+	public synchronized void onErrorResponse(VolleyError error) {
 		mException = error;
 		notifyAll();
 	}

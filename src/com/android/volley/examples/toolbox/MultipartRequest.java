@@ -38,15 +38,12 @@ public class MultipartRequest extends Request<JSONObject> {
 		buildMultipartEntity(parameters);
 	}
 	
-	private void buildMultipartEntity(
-			Bundle parameters) {
+	private void buildMultipartEntity(Bundle parameters) {
 		entity = encodePOSTUrl(entity, parameters);
 		entity.addPart(FILE_PART_NAME, new FileBody(mFilePart));
 	}
 	
-	public static MultipartEntity encodePOSTUrl(
-			MultipartEntity mEntity,
-			Bundle parameters) {
+	public static MultipartEntity encodePOSTUrl(MultipartEntity mEntity, Bundle parameters) {
 		if (parameters != null && parameters.size() > 0) {
 			boolean first = true;
 			for (String key : parameters.keySet()) {
@@ -89,8 +86,7 @@ public class MultipartRequest extends Request<JSONObject> {
 	}
 	
 	@Override
-	protected Response<JSONObject> parseNetworkResponse(
-			NetworkResponse response) {
+	protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
 		try {
 			try {
 				String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
@@ -114,8 +110,7 @@ public class MultipartRequest extends Request<JSONObject> {
 	}
 	
 	@Override
-	protected void deliverResponse(
-			JSONObject response) {
+	protected void deliverResponse(JSONObject response) {
 		try {
 			mListener.onResponse(response);
 		}

@@ -34,8 +34,7 @@ public class ExecutorDelivery implements ResponseDelivery {
 		// Make an Executor that just wraps the handler.
 		mResponsePoster = new Executor() {
 			@Override
-			public void execute(
-					Runnable command) {
+			public void execute(Runnable command) {
 				handler.post(command);
 			}
 		};
@@ -52,26 +51,19 @@ public class ExecutorDelivery implements ResponseDelivery {
 	}
 	
 	@Override
-	public void postResponse(
-			Request<?> request,
-			Response<?> response) {
+	public void postResponse(Request<?> request, Response<?> response) {
 		postResponse(request, response, null);
 	}
 	
 	@Override
-	public void postResponse(
-			Request<?> request,
-			Response<?> response,
-			Runnable runnable) {
+	public void postResponse(Request<?> request, Response<?> response, Runnable runnable) {
 		request.markDelivered();
 		request.addMarker("post-response");
 		mResponsePoster.execute(new ResponseDeliveryRunnable(request, response, runnable));
 	}
 	
 	@Override
-	public void postError(
-			Request<?> request,
-			VolleyError error) {
+	public void postError(Request<?> request, VolleyError error) {
 		request.addMarker("post-error");
 		Response<?> response = Response.error(error);
 		mResponsePoster.execute(new ResponseDeliveryRunnable(request, response, null));
@@ -105,8 +97,7 @@ public class ExecutorDelivery implements ResponseDelivery {
 			// Deliver a normal response or error, depending.
 			if (mResponse.isSuccess()) {
 				mRequest.deliverResponse(mResponse.result);
-			}
-			else {
+			} else {
 				mRequest.deliverError(mResponse.error);
 			}
 			
@@ -115,8 +106,7 @@ public class ExecutorDelivery implements ResponseDelivery {
 			// and the request can be finished.
 			if (mResponse.intermediate) {
 				mRequest.addMarker("intermediate-response");
-			}
-			else {
+			} else {
 				mRequest.finish("done");
 			}
 			

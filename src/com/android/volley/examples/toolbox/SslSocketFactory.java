@@ -28,9 +28,8 @@ class SslSocketFactory extends SSLSocketFactory {
 		super(createSSLContext(keyStore, keyStorePassword), STRICT_HOSTNAME_VERIFIER);
 	}
 	
-	private static SSLContext createSSLContext(
-			InputStream keyStore,
-			String keyStorePassword) throws GeneralSecurityException {
+	private static SSLContext createSSLContext(InputStream keyStore, String keyStorePassword)
+			throws GeneralSecurityException {
 		SSLContext sslcontext = null;
 		try {
 			sslcontext = SSLContext.getInstance("TLS");

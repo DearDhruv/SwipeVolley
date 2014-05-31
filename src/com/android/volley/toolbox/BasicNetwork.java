@@ -81,8 +81,7 @@ public class BasicNetwork implements Network {
 	}
 	
 	@Override
-	public NetworkResponse performRequest(
-			Request<?> request) throws VolleyError {
+	public NetworkResponse performRequest(Request<?> request) throws VolleyError {
 		long requestStart = SystemClock.elapsedRealtime();
 		while (true) {
 			HttpResponse httpResponse = null;
@@ -127,8 +126,7 @@ public class BasicNetwork implements Network {
 				NetworkResponse networkResponse = null;
 				if (httpResponse != null) {
 					statusCode = httpResponse.getStatusLine().getStatusCode();
-				}
-				else {
+				} else {
 					throw new NoConnectionError(e);
 				}
 				FLog.e("Unexpected response code %d for %s", statusCode, request.getUrl());
@@ -136,13 +134,11 @@ public class BasicNetwork implements Network {
 					networkResponse = new NetworkResponse(statusCode, responseContents, responseHeaders, false);
 					if (statusCode == HttpStatus.SC_UNAUTHORIZED || statusCode == HttpStatus.SC_FORBIDDEN) {
 						attemptRetryOnException("auth", request, new AuthFailureError(networkResponse));
-					}
-					else {
+					} else {
 						// TODO: Only throw ServerError for 5xx status codes.
 						throw new ServerError(networkResponse);
 					}
-				}
-				else {
+				} else {
 					throw new NetworkError(networkResponse);
 				}
 			}
@@ -172,10 +168,8 @@ public class BasicNetwork implements Network {
 	 * @param request
 	 *            The request to use.
 	 */
-	private static void attemptRetryOnException(
-			String logPrefix,
-			Request<?> request,
-			VolleyError exception) throws VolleyError {
+	private static void attemptRetryOnException(String logPrefix, Request<?> request, VolleyError exception)
+			throws VolleyError {
 		RetryPolicy retryPolicy = request.getRetryPolicy();
 		int oldTimeout = request.getTimeoutMs();
 		
@@ -189,9 +183,7 @@ public class BasicNetwork implements Network {
 		request.addMarker(String.format("%s-retry [timeout=%s]", logPrefix, oldTimeout));
 	}
 	
-	private void addCacheHeaders(
-			Map<String, String> headers,
-			Cache.Entry entry) {
+	private void addCacheHeaders(Map<String, String> headers, Cache.Entry entry) {
 		// If there's no cache entry, we're done.
 		if (entry == null) {
 			return;
@@ -207,17 +199,13 @@ public class BasicNetwork implements Network {
 		}
 	}
 	
-	protected void logError(
-			String what,
-			String url,
-			long start) {
+	protected void logError(String what, String url, long start) {
 		long now = SystemClock.elapsedRealtime();
 		FLog.v("HTTP ERROR(%s) %d ms to fetch %s", what, (now - start), url);
 	}
 	
 	/** Reads the contents of HttpEntity into a byte[]. */
-	private byte[] entityToBytes(
-			HttpEntity entity) throws IOException, ServerError {
+	private byte[] entityToBytes(HttpEntity entity) throws IOException, ServerError {
 		PoolingByteArrayOutputStream bytes = new PoolingByteArrayOutputStream(mPool, (int) entity.getContentLength());
 		byte[] buffer = null;
 		try {
@@ -252,8 +240,7 @@ public class BasicNetwork implements Network {
 	/**
 	 * Converts Headers[] to Map<String, String>.
 	 */
-	private static Map<String, String> convertHeaders(
-			Header[] headers) {
+	private static Map<String, String> convertHeaders(Header[] headers) {
 		Map<String, String> result = new HashMap<String, String>();
 		for (int i = 0; i < headers.length; i++) {
 			result.put(headers[i].getName(), headers[i].getValue());

@@ -49,17 +49,14 @@ public class HttpClientStack implements HttpStack {
 		mClient = client;
 	}
 	
-	private static void addHeaders(
-			HttpUriRequest httpRequest,
-			Map<String, String> headers) {
+	private static void addHeaders(HttpUriRequest httpRequest, Map<String, String> headers) {
 		for (String key : headers.keySet()) {
 			httpRequest.setHeader(key, headers.get(key));
 		}
 	}
 	
 	@SuppressWarnings("unused")
-	private static List<NameValuePair> getPostParameterPairs(
-			Map<String, String> postParams) {
+	private static List<NameValuePair> getPostParameterPairs(Map<String, String> postParams) {
 		List<NameValuePair> result = new ArrayList<NameValuePair>(postParams.size());
 		for (String key : postParams.keySet()) {
 			result.add(new BasicNameValuePair(key, postParams.get(key)));
@@ -68,9 +65,9 @@ public class HttpClientStack implements HttpStack {
 	}
 	
 	@Override
-	public HttpResponse performRequest(
-			Request<?> request,
-			Map<String, String> additionalHeaders) throws IOException, AuthFailureError {
+	public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders)
+			throws IOException,
+			AuthFailureError {
 		HttpUriRequest httpRequest = createHttpRequest(request, additionalHeaders);
 		addHeaders(httpRequest, additionalHeaders);
 		addHeaders(httpRequest, request.getHeaders());
@@ -88,9 +85,8 @@ public class HttpClientStack implements HttpStack {
 	 * Creates the appropriate subclass of HttpUriRequest for passed in request.
 	 */
 	@SuppressWarnings("deprecation")
-	/* protected */static HttpUriRequest createHttpRequest(
-			Request<?> request,
-			Map<String, String> additionalHeaders) throws AuthFailureError {
+	/* protected */static HttpUriRequest createHttpRequest(Request<?> request, Map<String, String> additionalHeaders)
+			throws AuthFailureError {
 		switch (request.getMethod()) {
 			case Method.DEPRECATED_GET_OR_POST: {
 				// This is the deprecated way that needs to be handled for
@@ -106,8 +102,7 @@ public class HttpClientStack implements HttpStack {
 					entity = new ByteArrayEntity(postBody);
 					postRequest.setEntity(entity);
 					return postRequest;
-				}
-				else {
+				} else {
 					return new HttpGet(request.getUrl());
 				}
 			}
@@ -132,9 +127,8 @@ public class HttpClientStack implements HttpStack {
 		}
 	}
 	
-	private static void setEntityIfNonEmptyBody(
-			HttpEntityEnclosingRequestBase httpRequest,
-			Request<?> request) throws AuthFailureError {
+	private static void setEntityIfNonEmptyBody(HttpEntityEnclosingRequestBase httpRequest, Request<?> request)
+			throws AuthFailureError {
 		byte[] body = request.getBody();
 		if (body != null) {
 			HttpEntity entity = new ByteArrayEntity(body);
@@ -148,8 +142,7 @@ public class HttpClientStack implements HttpStack {
 	 * Overwrite in subclasses to augment the request.
 	 * </p>
 	 */
-	protected void onPrepareRequest(
-			HttpUriRequest request) throws IOException {
+	protected void onPrepareRequest(HttpUriRequest request) throws IOException {
 		// Nothing.
 	}
 }

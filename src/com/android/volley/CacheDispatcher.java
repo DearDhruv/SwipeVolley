@@ -22,10 +22,9 @@ import com.android.volley.examples.toolbox.updated.FLog;
 /**
  * Provides a thread for performing cache triage on a queue of requests.
  * Requests added to the specified cache queue are resolved from cache. Any
- * deliverable response is posted back to the caller via a
- * {@link ResponseDelivery}. Cache misses and responses that require refresh are
- * enqueued on the specified network queue for processing by a
- * {@link NetworkDispatcher}.
+ * deliverable response is posted back to the caller via a {@link ResponseDelivery}. Cache misses
+ * and responses that require refresh are
+ * enqueued on the specified network queue for processing by a {@link NetworkDispatcher}.
  */
 @SuppressWarnings("rawtypes")
 public class CacheDispatcher extends Thread {
@@ -48,8 +47,8 @@ public class CacheDispatcher extends Thread {
 	private volatile boolean				mQuit	= false;
 	
 	/**
-	 * Creates a new cache triage dispatcher thread. You must call
-	 * {@link #start()} in order to begin processing.
+	 * Creates a new cache triage dispatcher thread. You must call {@link #start()} in order to
+	 * begin processing.
 	 * 
 	 * @param cacheQueue
 	 *            Queue of incoming requests for triage
@@ -128,8 +127,7 @@ public class CacheDispatcher extends Thread {
 					// Completely unexpired cache hit. Just deliver the
 					// response.
 					mDelivery.postResponse(request, response);
-				}
-				else {
+				} else {
 					// Soft-expired cache hit. We can deliver the cached
 					// response,
 					// but we need to also send the request to the network for

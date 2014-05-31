@@ -24,22 +24,17 @@ public class BitmapLruCache extends LruCache<String, Bitmap> implements ImageCac
 	}
 	
 	@Override
-	protected int sizeOf(
-			String key,
-			Bitmap value) {
+	protected int sizeOf(String key, Bitmap value) {
 		return value.getRowBytes() * value.getHeight();
 	}
 	
 	@Override
-	public Bitmap getBitmap(
-			String url) {
+	public Bitmap getBitmap(String url) {
 		return get(url);
 	}
 	
 	@Override
-	public void putBitmap(
-			String url,
-			Bitmap bitmap) {
+	public void putBitmap(String url, Bitmap bitmap) {
 		put(url, bitmap);
 	}
 }

@@ -44,16 +44,14 @@ public class SsX509TrustManager implements javax.net.ssl.X509TrustManager {
 		X509TrustManager mX509TrustManagerCustom = fetchTrustManager(keyStore, keyStorePassword);
 		if (mX509TrustManagerCustom != null) {
 			mX509TrustManagers.add(mX509TrustManagerCustom);
-		}
-		else {
+		} else {
 			throw new IllegalArgumentException(
 					"Keystore is valid but cannot find TrustManagerFactory of type X509TrustManager.");
 		}
 	}
 	
-	private javax.net.ssl.X509TrustManager fetchTrustManager(
-			InputStream keyStore,
-			String keyStorePassword) throws GeneralSecurityException {
+	private javax.net.ssl.X509TrustManager fetchTrustManager(InputStream keyStore, String keyStorePassword)
+			throws GeneralSecurityException {
 		javax.net.ssl.X509TrustManager ret = null;
 		
 		TrustManagerFactory tmf = prepareTrustManagerFactory(keyStore, keyStorePassword);
@@ -69,9 +67,8 @@ public class SsX509TrustManager implements javax.net.ssl.X509TrustManager {
 		return ret;
 	}
 	
-	private TrustManagerFactory prepareTrustManagerFactory(
-			InputStream keyStore,
-			String keyStorePassword) throws GeneralSecurityException {
+	private TrustManagerFactory prepareTrustManagerFactory(InputStream keyStore, String keyStorePassword)
+			throws GeneralSecurityException {
 		TrustManagerFactory ret = null;
 		
 		KeyStore ks;
@@ -89,16 +86,12 @@ public class SsX509TrustManager implements javax.net.ssl.X509TrustManager {
 	}
 	
 	@Override
-	public void checkClientTrusted(
-			X509Certificate[] chain,
-			String authType) throws CertificateException {
+	public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 		// Oh, I am easy!
 	}
 	
 	@Override
-	public void checkServerTrusted(
-			X509Certificate[] chain,
-			String authType) throws CertificateException {
+	public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 		boolean ok = false;
 		for (X509TrustManager tm : mX509TrustManagers) {
 			try {

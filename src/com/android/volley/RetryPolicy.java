@@ -38,6 +38,5 @@ public interface RetryPolicy {
 	 *             example if we ran out of attempts), the passed in error is
 	 *             thrown.
 	 */
-	public void retry(
-			VolleyError error) throws VolleyError;
+	public void retry(VolleyError error) throws VolleyError;
 }

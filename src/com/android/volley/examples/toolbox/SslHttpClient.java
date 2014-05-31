@@ -70,8 +70,7 @@ public class SslHttpClient extends DefaultHttpClient {
 	// we check intentionally for an old parameter
 			private static
 			HttpParams
-			checkForInvalidParams(
-					HttpParams params) {
+			checkForInvalidParams(HttpParams params) {
 		String className = (String) params.getParameter(ClientPNames.CONNECTION_MANAGER_FACTORY_CLASS_NAME);
 		if (className != null) {
 			throw new IllegalArgumentException(
@@ -102,8 +101,7 @@ public class SslHttpClient extends DefaultHttpClient {
 		return ret;
 	}
 	
-	public void setHttpsPort(
-			int httpsPort) {
+	public void setHttpsPort(int httpsPort) {
 		mHttpsPort = httpsPort;
 	}
 }

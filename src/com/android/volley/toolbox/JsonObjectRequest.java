@@ -52,9 +52,8 @@ public class JsonObjectRequest extends JsonRequest<JSONObject> {
 	}
 	
 	/**
-	 * Constructor which defaults to <code>GET</code> if
-	 * <code>jsonRequest</code> is <code>null</code>, <code>POST</code>
-	 * otherwise.
+	 * Constructor which defaults to <code>GET</code> if <code>jsonRequest</code> is
+	 * <code>null</code>, <code>POST</code> otherwise.
 	 * 
 	 * @see #JsonObjectRequest(int, String, JSONObject, Listener, ErrorListener)
 	 */
@@ -64,8 +63,7 @@ public class JsonObjectRequest extends JsonRequest<JSONObject> {
 	}
 	
 	@Override
-	protected Response<JSONObject> parseNetworkResponse(
-			NetworkResponse response) {
+	protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
 		try {
 			String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
 			return Response.success(new JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response));
