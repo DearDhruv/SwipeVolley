@@ -29,7 +29,7 @@ public class AndroidAuthenticator implements Authenticator {
 	private final Account	mAccount;
 	private final String	mAuthTokenType;
 	private final boolean	mNotifyAuthFailure;
-	
+
 	/**
 	 * Creates a new authenticator.
 	 * 
@@ -43,7 +43,7 @@ public class AndroidAuthenticator implements Authenticator {
 	public AndroidAuthenticator(Context context, Account account, String authTokenType) {
 		this(context, account, authTokenType, false);
 	}
-	
+
 	/**
 	 * Creates a new authenticator.
 	 * 
@@ -56,31 +56,31 @@ public class AndroidAuthenticator implements Authenticator {
 	 * @param notifyAuthFailure
 	 *            Whether to raise a notification upon auth failure
 	 */
-	public AndroidAuthenticator(Context context, Account account, String authTokenType, boolean notifyAuthFailure) {
+	public AndroidAuthenticator(Context context, Account account, String authTokenType,
+			boolean notifyAuthFailure) {
 		mContext = context;
 		mAccount = account;
 		mAuthTokenType = authTokenType;
 		mNotifyAuthFailure = notifyAuthFailure;
 	}
-	
+
 	/**
 	 * Returns the Account being used by this authenticator.
 	 */
 	public Account getAccount() {
 		return mAccount;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public String getAuthToken() throws AuthFailureError {
 		final AccountManager accountManager = AccountManager.get(mContext);
-		AccountManagerFuture<Bundle> future = accountManager.getAuthToken(mAccount, mAuthTokenType, mNotifyAuthFailure,
-				null, null);
+		AccountManagerFuture<Bundle> future = accountManager.getAuthToken(mAccount, mAuthTokenType,
+				mNotifyAuthFailure, null, null);
 		Bundle result;
 		try {
 			result = future.getResult();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new AuthFailureError("Error while retrieving auth token", e);
 		}
 		String authToken = null;
@@ -94,10 +94,10 @@ public class AndroidAuthenticator implements Authenticator {
 		if (authToken == null) {
 			throw new AuthFailureError("Got null auth token for type: " + mAuthTokenType);
 		}
-		
+
 		return authToken;
 	}
-	
+
 	@Override
 	public void invalidateAuthToken(String authToken) {
 		AccountManager.get(mContext).invalidateAuthToken(mAccount.type, authToken);

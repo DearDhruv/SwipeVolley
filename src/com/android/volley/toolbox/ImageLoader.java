@@ -1,15 +1,19 @@
 /**
  * Copyright (C) 2013 The Android Open Source Project
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.android.volley.toolbox;
 
 import java.util.HashMap;
@@ -35,50 +39,51 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 
 /**
- * Helper that handles loading and caching images from remote URLs.
- * The simple way to use this class is to call {@link ImageLoader#get(String, ImageListener)} and to
- * pass in the default
- * image listener provided by {@link ImageLoader#getImageListener(ImageView, int, int)}. Note that
- * all
+ * Helper that handles loading and caching images from remote URLs. The simple
+ * way to use this class is to call
+ * {@link ImageLoader#get(String, ImageListener)} and to pass in the default
+ * image listener provided by
+ * {@link ImageLoader#getImageListener(ImageView, int, int)}. Note that all
  * function calls to this class must be made from the main thead, and all
  * responses will be delivered to the main thread as well.
  */
 public class ImageLoader {
 	protected static final long							ANIMATION_DURATION_MS	= 400;
-	
+
 	private static Resources							mResources;
-	
+
 	/** RequestQueue for dispatching ImageRequests onto. */
 	private final RequestQueue							mRequestQueue;
-	
+
 	/**
 	 * Amount of time to wait after first response arrives before delivering all
 	 * responses.
 	 */
 	private int											mBatchResponseDelayMs	= 100;
-	
+
 	/**
 	 * The cache implementation to be used as an L1 cache before calling into
 	 * volley.
 	 */
 	private final ImageCache							mCache;
-	
+
 	/**
 	 * HashMap of Cache keys -> BatchedImageRequest used to track in-flight
 	 * requests so that we can coalesce multiple requests to the same URL into a
 	 * single network request.
 	 */
 	private final HashMap<String, BatchedImageRequest>	mInFlightRequests		= new HashMap<String, BatchedImageRequest>();
-	
+
 	/** HashMap of the currently pending responses (waiting to be delivered). */
 	private final HashMap<String, BatchedImageRequest>	mBatchedResponses		= new HashMap<String, BatchedImageRequest>();
-	
+
 	/** Handler to the main thread. */
-	private final Handler								mHandler				= new Handler(Looper.getMainLooper());
-	
+	private final Handler								mHandler				= new Handler(
+																						Looper.getMainLooper());
+
 	/** Runnable for in-flight response delivery. */
 	private Runnable									mRunnable;
-	
+
 	/**
 	 * Simple cache adapter interface. If provided to the ImageLoader, it will
 	 * be used as an L1 cache before dispatch to Volley. Implementations must
@@ -86,10 +91,10 @@ public class ImageLoader {
 	 */
 	public interface ImageCache {
 		public Bitmap getBitmap(String url);
-		
+
 		public void putBitmap(String url, Bitmap bitmap);
 	}
-	
+
 	/**
 	 * Constructs a new ImageLoader.
 	 * 
@@ -102,7 +107,7 @@ public class ImageLoader {
 		mRequestQueue = queue;
 		mCache = imageCache;
 	}
-	
+
 	/**
 	 * The default implementation of ImageListener which handles basic
 	 * functionality of showing a default image until the network response is
@@ -116,26 +121,24 @@ public class ImageLoader {
 	 * @param errorImageResId
 	 *            Error image resource ID to use, or 0 if it doesn't exist.
 	 */
-	public static ImageListener getImageListener(
-			final ImageView view,
-			final int defaultImageResId,
-			final int errorImageResId,
-			final boolean shouldAnimate) {
+	public static ImageListener getImageListener(final ImageView view, final int defaultImageResId,
+			final int errorImageResId, final boolean shouldAnimate) {
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			mResources = view.getContext().getResources();
 		}
 		return new ImageListener() {
-			
+
 			@Override
 			public void onErrorResponse(VolleyError error) {
 				if (errorImageResId != 0) {
 					view.setImageResource(errorImageResId);
 				}
 			}
-			
+
 			@SuppressLint("NewApi")
 			@Override
-			public void onResponse(ImageContainer response, boolean isImmediate, boolean fromDiskCache) {
+			public void onResponse(ImageContainer response, boolean isImmediate,
+					boolean fromDiskCache) {
 				if (response.getBitmap() != null) {
 					if (shouldAnimate && fromDiskCache) {
 						// Animation
@@ -146,7 +149,8 @@ public class ImageLoader {
 						} else {
 							TransitionDrawable td = new TransitionDrawable(new Drawable[] {
 									new ColorDrawable(android.R.color.transparent),
-									new BitmapDrawable(mResources, response.getBitmap()) });
+									new BitmapDrawable(mResources, response.getBitmap())
+							});
 							view.setImageDrawable(td);
 							td.startTransition((int) ANIMATION_DURATION_MS);
 						}
@@ -159,17 +163,15 @@ public class ImageLoader {
 			}
 		};
 	}
-	
+
 	/**
-	 * Interface for the response handlers on image requests.
-	 * The call flow is this: 1. Upon being attached to a request,
-	 * onResponse(response, true) will be invoked to reflect any cached data
-	 * that was already available. If the data was available,
-	 * response.getBitmap() will be non-null.
-	 * 2. After a network response returns, only one of the following cases will
-	 * happen: - onResponse(response, false) will be called if the image was
-	 * loaded. or - onErrorResponse will be called if there was an error loading
-	 * the image.
+	 * Interface for the response handlers on image requests. The call flow is
+	 * this: 1. Upon being attached to a request, onResponse(response, true)
+	 * will be invoked to reflect any cached data that was already available. If
+	 * the data was available, response.getBitmap() will be non-null. 2. After a
+	 * network response returns, only one of the following cases will happen: -
+	 * onResponse(response, false) will be called if the image was loaded. or -
+	 * onErrorResponse will be called if there was an error loading the image.
 	 */
 	public interface ImageListener extends ErrorListener {
 		/**
@@ -187,12 +189,12 @@ public class ImageLoader {
 		 */
 		public void onResponse(ImageContainer response, boolean isImmediate, boolean shouldAnimate);
 	}
-	
+
 	/**
-	 * Returns an ImageContainer for the requested URL.
-	 * The ImageContainer will contain either the specified default bitmap or
-	 * the loaded bitmap. If the default was returned, the {@link ImageLoader} will be invoked when
-	 * the request is fulfilled.
+	 * Returns an ImageContainer for the requested URL. The ImageContainer will
+	 * contain either the specified default bitmap or the loaded bitmap. If the
+	 * default was returned, the {@link ImageLoader} will be invoked when the
+	 * request is fulfilled.
 	 * 
 	 * @param requestUrl
 	 *            The URL of the image to be loaded.
@@ -203,7 +205,7 @@ public class ImageLoader {
 	public ImageContainer get(String requestUrl, final ImageListener listener) {
 		return get(requestUrl, listener, 0, 0);
 	}
-	
+
 	/**
 	 * Issues a bitmap request with the given URL if that image is not available
 	 * in the cache, and returns a bitmap container that contains all of the
@@ -222,12 +224,13 @@ public class ImageLoader {
 	 *         request, as well as the currently available image (default if
 	 *         remote is not loaded).
 	 */
-	public ImageContainer get(String requestUrl, ImageListener imageListener, int maxWidth, int maxHeight) {
+	public ImageContainer get(String requestUrl, ImageListener imageListener, int maxWidth,
+			int maxHeight) {
 		// only fulfill requests that were initiated from the main thread.
 		throwIfNotOnMainThread();
-		
+
 		final String cacheKey = getCacheKey(requestUrl, maxWidth, maxHeight);
-		
+
 		// Try to look up the request in the cache of remote images.
 		Bitmap cachedBitmap = mCache.getBitmap(cacheKey);
 		if (cachedBitmap != null) {
@@ -236,14 +239,15 @@ public class ImageLoader {
 			imageListener.onResponse(container, true, false);
 			return container;
 		}
-		
+
 		// The bitmap did not exist in the cache, fetch it!
-		ImageContainer imageContainer = new ImageContainer(null, requestUrl, cacheKey, imageListener);
-		
+		ImageContainer imageContainer = new ImageContainer(null, requestUrl, cacheKey,
+				imageListener);
+
 		// Update the caller to let them know that they should use the default
 		// bitmap.
 		imageListener.onResponse(imageContainer, true, false);
-		
+
 		// Check to see if a request is already in-flight.
 		BatchedImageRequest request = mInFlightRequests.get(cacheKey);
 		if (request != null) {
@@ -251,7 +255,7 @@ public class ImageLoader {
 			request.addContainer(imageContainer);
 			return imageContainer;
 		}
-		
+
 		// The request is not already in flight. Send the new request to the
 		// network and
 		// track it.
@@ -266,12 +270,12 @@ public class ImageLoader {
 				onGetImageError(cacheKey, error);
 			}
 		});
-		
+
 		mRequestQueue.add(newRequest);
 		mInFlightRequests.put(cacheKey, new BatchedImageRequest(newRequest, imageContainer));
 		return imageContainer;
 	}
-	
+
 	/**
 	 * Sets the amount of time to wait after the first response arrives before
 	 * delivering all responses. Batching can be disabled entirely by passing in
@@ -283,7 +287,7 @@ public class ImageLoader {
 	public void setBatchedResponseDelay(int newBatchedResponseDelayMs) {
 		mBatchResponseDelayMs = newBatchedResponseDelayMs;
 	}
-	
+
 	/**
 	 * Handler for when an image was successfully loaded.
 	 * 
@@ -295,19 +299,19 @@ public class ImageLoader {
 	private void onGetImageSuccess(String cacheKey, Bitmap response) {
 		// cache the image that was fetched.
 		mCache.putBitmap(cacheKey, response);
-		
+
 		// remove the request from the list of in-flight requests.
 		BatchedImageRequest request = mInFlightRequests.remove(cacheKey);
-		
+
 		if (request != null) {
 			// Update the response bitmap.
 			request.mResponseBitmap = response;
-			
+
 			// Send the batched response
 			batchResponse(cacheKey, request, null);
 		}
 	}
-	
+
 	/**
 	 * Handler for when an image failed to load.
 	 * 
@@ -318,13 +322,13 @@ public class ImageLoader {
 		// Notify the requesters that something failed via a null result.
 		// Remove this request from the list of in-flight requests.
 		BatchedImageRequest request = mInFlightRequests.remove(cacheKey);
-		
+
 		if (request != null) {
 			// Send the batched response
 			batchResponse(cacheKey, request, error);
 		}
 	}
-	
+
 	/**
 	 * Container object for all of the data surrounding an image request.
 	 */
@@ -335,15 +339,15 @@ public class ImageLoader {
 		 * the requested URL).
 		 */
 		private Bitmap				mBitmap;
-		
+
 		private final ImageListener	mListener;
-		
+
 		/** The cache key that was associated with the request */
 		private final String		mCacheKey;
-		
+
 		/** The request URL that was specified */
 		private final String		mRequestUrl;
-		
+
 		/**
 		 * Constructs a BitmapContainer object.
 		 * 
@@ -355,13 +359,14 @@ public class ImageLoader {
 		 *            The cache key that identifies the requested URL for this
 		 *            container.
 		 */
-		public ImageContainer(Bitmap bitmap, String requestUrl, String cacheKey, ImageListener listener) {
+		public ImageContainer(Bitmap bitmap, String requestUrl, String cacheKey,
+				ImageListener listener) {
 			mBitmap = bitmap;
 			mRequestUrl = requestUrl;
 			mCacheKey = cacheKey;
 			mListener = listener;
 		}
-		
+
 		/**
 		 * Releases interest in the in-flight request (and cancels it if no one
 		 * else is listening).
@@ -370,7 +375,7 @@ public class ImageLoader {
 			if (mListener == null) {
 				return;
 			}
-			
+
 			BatchedImageRequest request = mInFlightRequests.get(mCacheKey);
 			if (request != null) {
 				boolean canceled = request.removeContainerAndCancelIfNecessary(this);
@@ -388,7 +393,7 @@ public class ImageLoader {
 				}
 			}
 		}
-		
+
 		/**
 		 * Returns the bitmap associated with the request URL if it has been
 		 * loaded, null otherwise.
@@ -396,7 +401,7 @@ public class ImageLoader {
 		public Bitmap getBitmap() {
 			return mBitmap;
 		}
-		
+
 		/**
 		 * Returns the requested URL for this container.
 		 */
@@ -404,7 +409,7 @@ public class ImageLoader {
 			return mRequestUrl;
 		}
 	}
-	
+
 	/**
 	 * Wrapper class used to map a Request to the set of active ImageContainer
 	 * objects that are interested in its results.
@@ -412,16 +417,16 @@ public class ImageLoader {
 	private class BatchedImageRequest {
 		/** The request being tracked */
 		private final Request<?>					mRequest;
-		
+
 		/** The result of the request being tracked by this item */
 		private Bitmap								mResponseBitmap;
-		
+
 		/**
 		 * List of all of the active ImageContainers that are interested in the
 		 * request
 		 */
 		private final LinkedList<ImageContainer>	mContainers	= new LinkedList<ImageContainer>();
-		
+
 		/**
 		 * Constructs a new BatchedImageRequest object
 		 * 
@@ -435,7 +440,7 @@ public class ImageLoader {
 			mRequest = request;
 			mContainers.add(container);
 		}
-		
+
 		/**
 		 * Adds another ImageContainer to the list of those interested in the
 		 * results of the request.
@@ -443,7 +448,7 @@ public class ImageLoader {
 		public void addContainer(ImageContainer container) {
 			mContainers.add(container);
 		}
-		
+
 		/**
 		 * Detatches the bitmap container from the request and cancels the
 		 * request if no one is left listening.
@@ -461,7 +466,7 @@ public class ImageLoader {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Starts the runnable for batched delivery of responses if it is not
 	 * already started.
@@ -504,19 +509,19 @@ public class ImageLoader {
 					mBatchedResponses.clear();
 					mRunnable = null;
 				}
-				
+
 			};
 			// Post the runnable.
 			mHandler.postDelayed(mRunnable, mBatchResponseDelayMs);
 		}
 	}
-	
+
 	private void throwIfNotOnMainThread() {
 		if (Looper.myLooper() != Looper.getMainLooper()) {
 			throw new IllegalStateException("ImageLoader must be invoked from the main thread.");
 		}
 	}
-	
+
 	/**
 	 * Creates a cache key for use with the L1 cache.
 	 * 
@@ -528,7 +533,7 @@ public class ImageLoader {
 	 *            The max-height of the output.
 	 */
 	private static String getCacheKey(String url, int maxWidth, int maxHeight) {
-		return new StringBuilder(url.length() + 12).append("#W").append(maxWidth).append("#H").append(maxHeight)
-				.append(url).toString();
+		return new StringBuilder(url.length() + 12).append("#W").append(maxWidth).append("#H")
+				.append(maxHeight).append(url).toString();
 	}
 }

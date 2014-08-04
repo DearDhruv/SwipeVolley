@@ -26,7 +26,7 @@ public interface Authenticator {
 	 *             If authentication did not succeed
 	 */
 	public String getAuthToken() throws AuthFailureError;
-	
+
 	/**
 	 * Invalidates the provided auth token.
 	 */

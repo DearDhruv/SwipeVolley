@@ -1,3 +1,4 @@
+
 package com.deardhruv.swipevolley;
 
 import android.annotation.SuppressLint;
@@ -18,15 +19,15 @@ public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 	NetworkImageView	imagePreview;
 	TextView			txtName;
 	ItemDetail			sharedItemArg;
-	
+
 	public ImagePreviewFrag() {
 	}
-	
+
 	public ImagePreviewFrag(IUpdateImageView mCallback) {
 		// TODO Auto-generated constructor stub
 		mCallback = this;
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -34,7 +35,7 @@ public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 		if (getArguments() != null)
 			sharedItemArg = (ItemDetail) getArguments().get("item");
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		fragView = inflater.inflate(R.layout.image_preview_layout, container, false);
@@ -42,7 +43,7 @@ public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 		txtName = (TextView) fragView.findViewById(R.id.txtName);
 		return fragView;
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -51,14 +52,14 @@ public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 			updateImagePreview(sharedItemArg);
 		}
 	}
-	
+
 	@Override
 	public void updateImagePreview(ItemDetail sharedItem) {
 		if (sharedItem != null) {
 			imagePreview.setImageUrl(sharedItem.getImgUrl(), MyVolley.getImageLoader());
 			txtName.setText(sharedItem.getName());
-			
+
 		}
 	}
-	
+
 }

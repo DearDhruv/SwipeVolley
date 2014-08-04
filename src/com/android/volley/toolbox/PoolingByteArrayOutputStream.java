@@ -27,9 +27,9 @@ public class PoolingByteArrayOutputStream extends ByteArrayOutputStream {
 	 * initialized.
 	 */
 	private static final int	DEFAULT_SIZE	= 256;
-	
+
 	private final ByteArrayPool	mPool;
-	
+
 	/**
 	 * Constructs a new PoolingByteArrayOutputStream with a default size. If
 	 * more bytes are written to this instance, the underlying byte array will
@@ -38,10 +38,10 @@ public class PoolingByteArrayOutputStream extends ByteArrayOutputStream {
 	public PoolingByteArrayOutputStream(ByteArrayPool pool) {
 		this(pool, DEFAULT_SIZE);
 	}
-	
+
 	/**
-	 * Constructs a new {@code ByteArrayOutputStream} with a default size of {@code size} bytes. If
-	 * more than {@code size} bytes are written to this
+	 * Constructs a new {@code ByteArrayOutputStream} with a default size of
+	 * {@code size} bytes. If more than {@code size} bytes are written to this
 	 * instance, the underlying byte array will expand.
 	 * 
 	 * @param size
@@ -52,19 +52,19 @@ public class PoolingByteArrayOutputStream extends ByteArrayOutputStream {
 		mPool = pool;
 		buf = mPool.getBuf(Math.max(size, DEFAULT_SIZE));
 	}
-	
+
 	@Override
 	public void close() throws IOException {
 		mPool.returnBuf(buf);
 		buf = null;
 		super.close();
 	}
-	
+
 	@Override
 	public void finalize() {
 		mPool.returnBuf(buf);
 	}
-	
+
 	/**
 	 * Ensures there is enough space in the buffer for the given number of
 	 * additional bytes.
@@ -79,13 +79,13 @@ public class PoolingByteArrayOutputStream extends ByteArrayOutputStream {
 		mPool.returnBuf(buf);
 		buf = newbuf;
 	}
-	
+
 	@Override
 	public synchronized void write(byte[] buffer, int offset, int len) {
 		expand(len);
 		super.write(buffer, offset, len);
 	}
-	
+
 	@Override
 	public synchronized void write(int oneByte) {
 		expand(1);

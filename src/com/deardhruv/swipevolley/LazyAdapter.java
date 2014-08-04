@@ -1,3 +1,4 @@
+
 package com.deardhruv.swipevolley;
 
 import java.util.ArrayList;
@@ -15,29 +16,33 @@ import com.android.volley.examples.toolbox.MyVolley;
 import com.android.volley.toolbox.NetworkImageView;
 
 public class LazyAdapter extends BaseAdapter {
-	
+
 	private Activity				activity;
 	private static LayoutInflater	inflater	= null;
 	private ArrayList<ItemDetail>	mList;
-	
+
 	public LazyAdapter(Activity a, List<ItemDetail> list) {
 		activity = a;
 		mList = new ArrayList<ItemDetail>(list);
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
-	
+
+	@Override
 	public int getCount() {
 		return mList.size();
 	}
-	
+
+	@Override
 	public Object getItem(int position) {
 		return mList.get(position);
 	}
-	
+
+	@Override
 	public long getItemId(int position) {
 		return position;
 	}
-	
+
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
@@ -52,11 +57,11 @@ public class LazyAdapter extends BaseAdapter {
 		holder.image.setDefaultImageResId(R.drawable.ic_launcher);
 		holder.image.setImageUrl(mList.get(position).getImgUrl(), MyVolley.getImageLoader());
 		holder.text.setText("" + mList.get(position).getName());
-		
+
 		// convertView.setTag(holder);
 		return convertView;
 	}
-	
+
 	class ViewHolder {
 		TextView			text;
 		NetworkImageView	image;

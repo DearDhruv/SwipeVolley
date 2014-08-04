@@ -24,14 +24,14 @@ import com.android.volley.toolbox.ImageLoader;
  * @author Ognyan Bankov
  */
 public class FakeImageCache implements ImageLoader.ImageCache {
-	
+
 	@Override
 	public Bitmap getBitmap(String url) {
 		return null;
 	}
-	
+
 	@Override
 	public void putBitmap(String url, Bitmap bitmap) {
 	}
-	
+
 }

@@ -42,19 +42,19 @@ import com.android.volley.Request.Method;
  */
 public class HttpClientStack implements HttpStack {
 	protected final HttpClient	mClient;
-	
+
 	private final static String	HEADER_CONTENT_TYPE	= "Content-Type";
-	
+
 	public HttpClientStack(HttpClient client) {
 		mClient = client;
 	}
-	
+
 	private static void addHeaders(HttpUriRequest httpRequest, Map<String, String> headers) {
 		for (String key : headers.keySet()) {
 			httpRequest.setHeader(key, headers.get(key));
 		}
 	}
-	
+
 	@SuppressWarnings("unused")
 	private static List<NameValuePair> getPostParameterPairs(Map<String, String> postParams) {
 		List<NameValuePair> result = new ArrayList<NameValuePair>(postParams.size());
@@ -63,11 +63,10 @@ public class HttpClientStack implements HttpStack {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders)
-			throws IOException,
-			AuthFailureError {
+			throws IOException, AuthFailureError {
 		HttpUriRequest httpRequest = createHttpRequest(request, additionalHeaders);
 		addHeaders(httpRequest, additionalHeaders);
 		addHeaders(httpRequest, request.getHeaders());
@@ -80,13 +79,13 @@ public class HttpClientStack implements HttpStack {
 		HttpConnectionParams.setSoTimeout(httpParams, timeoutMs);
 		return mClient.execute(httpRequest);
 	}
-	
+
 	/**
 	 * Creates the appropriate subclass of HttpUriRequest for passed in request.
 	 */
 	@SuppressWarnings("deprecation")
-	/* protected */static HttpUriRequest createHttpRequest(Request<?> request, Map<String, String> additionalHeaders)
-			throws AuthFailureError {
+	/* protected */static HttpUriRequest createHttpRequest(Request<?> request,
+			Map<String, String> additionalHeaders) throws AuthFailureError {
 		switch (request.getMethod()) {
 			case Method.DEPRECATED_GET_OR_POST: {
 				// This is the deprecated way that needs to be handled for
@@ -126,16 +125,16 @@ public class HttpClientStack implements HttpStack {
 				throw new IllegalStateException("Unknown request method.");
 		}
 	}
-	
-	private static void setEntityIfNonEmptyBody(HttpEntityEnclosingRequestBase httpRequest, Request<?> request)
-			throws AuthFailureError {
+
+	private static void setEntityIfNonEmptyBody(HttpEntityEnclosingRequestBase httpRequest,
+			Request<?> request) throws AuthFailureError {
 		byte[] body = request.getBody();
 		if (body != null) {
 			HttpEntity entity = new ByteArrayEntity(body);
 			httpRequest.setEntity(entity);
 		}
 	}
-	
+
 	/**
 	 * Called before the request is executed using the underlying HttpClient.
 	 * <p>

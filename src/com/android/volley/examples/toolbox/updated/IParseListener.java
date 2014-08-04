@@ -1,3 +1,4 @@
+
 package com.android.volley.examples.toolbox.updated;
 
 import org.json.JSONObject;
@@ -10,11 +11,11 @@ import com.android.volley.VolleyError;
  * @author DearDhruv
  */
 public interface IParseListener {
-	
+
 	// Interface methods for Responses
-	
+
 	// void ErrorResponse(VolleyError error, int requestCode, int errorcode);
-	
+
 	/**
 	 * Invoked when any network failure or JSON parsing failure.
 	 * 
@@ -22,7 +23,7 @@ public interface IParseListener {
 	 * @param requestCode
 	 */
 	void ErrorResponse(VolleyError error, int requestCode);
-	
+
 	/**
 	 * Invoked when successful response and successful JSON parsing completed.
 	 * 

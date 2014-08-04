@@ -1,3 +1,4 @@
+
 package com.android.volley.examples.toolbox.updated;
 
 import java.io.File;
@@ -20,27 +21,28 @@ import com.android.volley.toolbox.JsonObjectRequest;
  * @author DearDhruv
  */
 public class JSONRequestResponse {
-	
+
 	public JSONRequestResponse(Context cntx) {
 		mContext = cntx;
 	}
-	
+
 	@SuppressWarnings("unused")
-	private final Context	mContext;
-	private int				reqCode;
-	private IParseListener	listner;
-	
-	private boolean			isFile	= false;
-	private String			file_path	= "", key = "";
-	
-	public void getResponse(String url, final int requestCode, IParseListener mParseListener) {
+	private final Context		mContext;
+	private int					reqCode;
+	private IJSONParseListener	listner;
+
+	private boolean				isFile	= false;
+	private String				file_path	= "", key = "";
+
+	public void getResponse(String url, final int requestCode, IJSONParseListener mParseListener) {
 		getResponse(url, requestCode, mParseListener, null);
 	}
-	
-	public void getResponse(String url, final int requestCode, IParseListener mParseListener, Bundle params) {
+
+	public void getResponse(String url, final int requestCode, IJSONParseListener mParseListener,
+			Bundle params) {
 		this.listner = mParseListener;
 		this.reqCode = requestCode;
-		
+
 		Response.Listener<JSONObject> sListener = new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
@@ -49,7 +51,7 @@ public class JSONRequestResponse {
 				}
 			}
 		};
-		
+
 		Response.ErrorListener eListener = new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
@@ -58,28 +60,30 @@ public class JSONRequestResponse {
 				}
 			}
 		};
-		
+
 		if (!isFile) {
-			JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, sListener, eListener);
+			JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+					sListener, eListener);
 			MyVolley.getRequestQueue().add(jsObjRequest);
 		} else {
 			if (file_path != null) {
 				File mFile = new File(file_path);
-				MultipartRequest multipartRequest = new MultipartRequest(url, eListener, sListener, key, mFile, params);
+				MultipartRequest multipartRequest = new MultipartRequest(url, eListener, sListener,
+						key, mFile, params);
 				MyVolley.getRequestQueue().add(multipartRequest);
 			} else {
 				throw new NullPointerException("File path is null");
 			}
 		}
 	}
-	
+
 	/**
 	 * @return the isFile
 	 */
 	public boolean isFile() {
 		return isFile;
 	}
-	
+
 	/**
 	 * @param isFile
 	 *            the File to set
@@ -91,5 +95,5 @@ public class JSONRequestResponse {
 			this.isFile = true;
 		}
 	}
-	
+
 }

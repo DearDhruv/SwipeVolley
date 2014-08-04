@@ -23,7 +23,7 @@ import android.os.Handler;
 public class ExecutorDelivery implements ResponseDelivery {
 	/** Used for posting responses, typically to the main thread. */
 	private final Executor	mResponsePoster;
-	
+
 	/**
 	 * Creates a new response delivery interface.
 	 * 
@@ -39,7 +39,7 @@ public class ExecutorDelivery implements ResponseDelivery {
 			}
 		};
 	}
-	
+
 	/**
 	 * Creates a new response delivery interface, mockable version for testing.
 	 * 
@@ -49,26 +49,26 @@ public class ExecutorDelivery implements ResponseDelivery {
 	public ExecutorDelivery(Executor executor) {
 		mResponsePoster = executor;
 	}
-	
+
 	@Override
 	public void postResponse(Request<?> request, Response<?> response) {
 		postResponse(request, response, null);
 	}
-	
+
 	@Override
 	public void postResponse(Request<?> request, Response<?> response, Runnable runnable) {
 		request.markDelivered();
 		request.addMarker("post-response");
 		mResponsePoster.execute(new ResponseDeliveryRunnable(request, response, runnable));
 	}
-	
+
 	@Override
 	public void postError(Request<?> request, VolleyError error) {
 		request.addMarker("post-error");
 		Response<?> response = Response.error(error);
 		mResponsePoster.execute(new ResponseDeliveryRunnable(request, response, null));
 	}
-	
+
 	/**
 	 * A Runnable used for delivering network responses to a listener on the
 	 * main thread.
@@ -78,13 +78,13 @@ public class ExecutorDelivery implements ResponseDelivery {
 		private final Request	mRequest;
 		private final Response	mResponse;
 		private final Runnable	mRunnable;
-		
+
 		public ResponseDeliveryRunnable(Request request, Response response, Runnable runnable) {
 			mRequest = request;
 			mResponse = response;
 			mRunnable = runnable;
 		}
-		
+
 		@SuppressWarnings("unchecked")
 		@Override
 		public void run() {
@@ -93,14 +93,14 @@ public class ExecutorDelivery implements ResponseDelivery {
 				mRequest.finish("canceled-at-delivery");
 				return;
 			}
-			
+
 			// Deliver a normal response or error, depending.
 			if (mResponse.isSuccess()) {
 				mRequest.deliverResponse(mResponse.result);
 			} else {
 				mRequest.deliverError(mResponse.error);
 			}
-			
+
 			// If this is an intermediate response, add a marker, otherwise
 			// we're done
 			// and the request can be finished.
@@ -109,7 +109,7 @@ public class ExecutorDelivery implements ResponseDelivery {
 			} else {
 				mRequest.finish("done");
 			}
-			
+
 			// If we have been provided a post-delivery runnable, run it.
 			if (mRunnable != null) {
 				mRunnable.run();

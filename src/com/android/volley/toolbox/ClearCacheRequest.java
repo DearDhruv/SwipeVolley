@@ -27,7 +27,7 @@ import com.android.volley.Response;
 public class ClearCacheRequest extends Request<Object> {
 	private final Cache		mCache;
 	private final Runnable	mCallback;
-	
+
 	/**
 	 * Creates a synthetic request for clearing the cache.
 	 * 
@@ -42,7 +42,7 @@ public class ClearCacheRequest extends Request<Object> {
 		mCache = cache;
 		mCallback = callback;
 	}
-	
+
 	@Override
 	public boolean isCanceled() {
 		// This is a little bit of a hack, but hey, why not.
@@ -53,17 +53,17 @@ public class ClearCacheRequest extends Request<Object> {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public Priority getPriority() {
 		return Priority.IMMEDIATE;
 	}
-	
+
 	@Override
 	protected Response<Object> parseNetworkResponse(NetworkResponse response) {
 		return null;
 	}
-	
+
 	@Override
 	protected void deliverResponse(Object response) {
 	}

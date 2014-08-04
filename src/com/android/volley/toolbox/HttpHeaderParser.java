@@ -26,7 +26,7 @@ import com.android.volley.NetworkResponse;
  * Utility methods for parsing HTTP headers.
  */
 public class HttpHeaderParser {
-	
+
 	/**
 	 * Extracts a {@link Cache.Entry} from a {@link NetworkResponse}.
 	 * 
@@ -37,23 +37,23 @@ public class HttpHeaderParser {
 	 */
 	public static Cache.Entry parseCacheHeaders(NetworkResponse response) {
 		long now = System.currentTimeMillis();
-		
+
 		Map<String, String> headers = response.headers;
-		
+
 		long serverDate = 0;
 		long serverExpires = 0;
 		long softExpire = 0;
 		long maxAge = 0;
 		boolean hasCacheControl = false;
-		
+
 		String serverEtag = null;
 		String headerValue;
-		
+
 		headerValue = headers.get("Date");
 		if (headerValue != null) {
 			serverDate = parseDateAsEpoch(headerValue);
 		}
-		
+
 		headerValue = headers.get("Cache-Control");
 		if (headerValue != null) {
 			hasCacheControl = true;
@@ -65,22 +65,21 @@ public class HttpHeaderParser {
 				} else if (token.startsWith("max-age=")) {
 					try {
 						maxAge = Long.parseLong(token.substring(8));
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 					}
 				} else if (token.equals("must-revalidate") || token.equals("proxy-revalidate")) {
 					maxAge = 0;
 				}
 			}
 		}
-		
+
 		headerValue = headers.get("Expires");
 		if (headerValue != null) {
 			serverExpires = parseDateAsEpoch(headerValue);
 		}
-		
+
 		serverEtag = headers.get("ETag");
-		
+
 		// Cache-Control takes precedence over an Expires header, even if both
 		// exist and Expires
 		// is more restrictive.
@@ -91,7 +90,7 @@ public class HttpHeaderParser {
 			// softExpire.
 			softExpire = now + (serverExpires - serverDate);
 		}
-		
+
 		Cache.Entry entry = new Cache.Entry();
 		entry.data = response.data;
 		entry.etag = serverEtag;
@@ -99,10 +98,10 @@ public class HttpHeaderParser {
 		entry.ttl = entry.softTtl;
 		entry.serverDate = serverDate;
 		entry.responseHeaders = headers;
-		
+
 		return entry;
 	}
-	
+
 	/**
 	 * Parse date in RFC1123 format, and return its value as epoch
 	 */
@@ -110,13 +109,12 @@ public class HttpHeaderParser {
 		try {
 			// Parse date in RFC1123 format if this header contains one
 			return DateUtils.parseDate(dateStr).getTime();
-		}
-		catch (DateParseException e) {
+		} catch (DateParseException e) {
 			// Date in invalid format, fallback to 0
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Returns the charset specified in the Content-Type of this header, or the
 	 * HTTP default (ISO-8859-1) if none can be found.
@@ -134,7 +132,7 @@ public class HttpHeaderParser {
 				}
 			}
 		}
-		
+
 		return HTTP.DEFAULT_CONTENT_CHARSET;
 	}
 }

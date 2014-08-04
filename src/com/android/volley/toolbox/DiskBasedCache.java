@@ -38,29 +38,29 @@ import com.android.volley.examples.toolbox.updated.FLog;
  * specified directory. The default disk usage size is 5MB, but is configurable.
  */
 public class DiskBasedCache implements Cache {
-	
+
 	/** Map of the Key, CacheHeader pairs */
-	private final Map<String, CacheHeader>	mEntries					= new LinkedHashMap<String, CacheHeader>(16,
-																				.75f, true);
-	
+	private final Map<String, CacheHeader>	mEntries					= new LinkedHashMap<String, CacheHeader>(
+																				16, .75f, true);
+
 	/** Total amount of space currently used by the cache in bytes. */
 	private long							mTotalSize					= 0;
-	
+
 	/** The root directory to use for the cache. */
 	private final File						mRootDirectory;
-	
+
 	/** The maximum size of the cache in bytes. */
 	private final int						mMaxCacheSizeInBytes;
-	
+
 	/** Default maximum disk usage in bytes. */
 	private static final int				DEFAULT_DISK_USAGE_BYTES	= 5 * 1024 * 1024;
-	
+
 	/** High water mark percentage for the cache */
 	private static final float				HYSTERESIS_FACTOR			= 0.9f;
-	
+
 	/** Current cache version */
 	private static final int				CACHE_VERSION				= 2;
-	
+
 	/**
 	 * Constructs an instance of the DiskBasedCache at the specified directory.
 	 * 
@@ -73,7 +73,7 @@ public class DiskBasedCache implements Cache {
 		mRootDirectory = rootDirectory;
 		mMaxCacheSizeInBytes = maxCacheSizeInBytes;
 	}
-	
+
 	/**
 	 * Constructs an instance of the DiskBasedCache at the specified directory
 	 * using the default maximum cache size of 5MB.
@@ -84,7 +84,7 @@ public class DiskBasedCache implements Cache {
 	public DiskBasedCache(File rootDirectory) {
 		this(rootDirectory, DEFAULT_DISK_USAGE_BYTES);
 	}
-	
+
 	/**
 	 * Clears the cache. Deletes all cached files from disk.
 	 */
@@ -100,7 +100,7 @@ public class DiskBasedCache implements Cache {
 		mTotalSize = 0;
 		FLog.d("Cache cleared.");
 	}
-	
+
 	/**
 	 * Returns the cache entry with the specified key if it exists, null
 	 * otherwise.
@@ -112,7 +112,7 @@ public class DiskBasedCache implements Cache {
 		if (entry == null) {
 			return null;
 		}
-		
+
 		File file = getFileForKey(key);
 		CountingInputStream cis = null;
 		try {
@@ -120,24 +120,21 @@ public class DiskBasedCache implements Cache {
 			CacheHeader.readHeader(cis); // eat header
 			byte[] data = streamToBytes(cis, (int) (file.length() - cis.bytesRead));
 			return entry.toCacheEntry(data);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			FLog.d("%s: %s", file.getAbsolutePath(), e.toString());
 			remove(key);
 			return null;
-		}
-		finally {
+		} finally {
 			if (cis != null) {
 				try {
 					cis.close();
-				}
-				catch (IOException ioe) {
+				} catch (IOException ioe) {
 					return null;
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Initializes the DiskBasedCache by scanning for all files currently in the
 	 * specified root directory. Creates the root directory if necessary.
@@ -150,7 +147,7 @@ public class DiskBasedCache implements Cache {
 			}
 			return;
 		}
-		
+
 		File[] files = mRootDirectory.listFiles();
 		if (files == null) {
 			return;
@@ -162,24 +159,21 @@ public class DiskBasedCache implements Cache {
 				CacheHeader entry = CacheHeader.readHeader(fis);
 				entry.size = file.length();
 				putEntry(entry.key, entry);
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				if (file != null) {
 					file.delete();
 				}
-			}
-			finally {
+			} finally {
 				try {
 					if (fis != null) {
 						fis.close();
 					}
-				}
-				catch (IOException ignored) {
+				} catch (IOException ignored) {
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Invalidates an entry in the cache.
 	 * 
@@ -198,9 +192,9 @@ public class DiskBasedCache implements Cache {
 			}
 			put(key, entry);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Puts the entry with the specified key into the cache.
 	 */
@@ -216,15 +210,14 @@ public class DiskBasedCache implements Cache {
 			fos.close();
 			putEntry(key, e);
 			return;
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 		}
 		boolean deleted = file.delete();
 		if (!deleted) {
 			FLog.d("Could not clean up file %s", file.getAbsolutePath());
 		}
 	}
-	
+
 	/**
 	 * Removes the specified key from the cache if it exists.
 	 */
@@ -233,10 +226,11 @@ public class DiskBasedCache implements Cache {
 		boolean deleted = getFileForKey(key).delete();
 		removeEntry(key);
 		if (!deleted) {
-			FLog.d("Could not delete cache entry for key=%s, filename=%s", key, getFilenameForKey(key));
+			FLog.d("Could not delete cache entry for key=%s, filename=%s", key,
+					getFilenameForKey(key));
 		}
 	}
-	
+
 	/**
 	 * Creates a pseudo-unique filename for the specified cache key.
 	 * 
@@ -250,14 +244,14 @@ public class DiskBasedCache implements Cache {
 		localFilename += String.valueOf(key.substring(firstHalfLength).hashCode());
 		return localFilename;
 	}
-	
+
 	/**
 	 * Returns a file object for the given cache key.
 	 */
 	public File getFileForKey(String key) {
 		return new File(mRootDirectory, getFilenameForKey(key));
 	}
-	
+
 	/**
 	 * Prunes the cache to fit the amount of bytes specified.
 	 * 
@@ -271,11 +265,11 @@ public class DiskBasedCache implements Cache {
 		if (FLog.DEBUG) {
 			FLog.v("Pruning old cache entries.");
 		}
-		
+
 		long before = mTotalSize;
 		int prunedFiles = 0;
 		long startTime = SystemClock.elapsedRealtime();
-		
+
 		Iterator<Map.Entry<String, CacheHeader>> iterator = mEntries.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Map.Entry<String, CacheHeader> entry = iterator.next();
@@ -284,22 +278,23 @@ public class DiskBasedCache implements Cache {
 			if (deleted) {
 				mTotalSize -= e.size;
 			} else {
-				FLog.d("Could not delete cache entry for key=%s, filename=%s", e.key, getFilenameForKey(e.key));
+				FLog.d("Could not delete cache entry for key=%s, filename=%s", e.key,
+						getFilenameForKey(e.key));
 			}
 			iterator.remove();
 			prunedFiles++;
-			
+
 			if ((mTotalSize + neededSpace) < mMaxCacheSizeInBytes * HYSTERESIS_FACTOR) {
 				break;
 			}
 		}
-		
+
 		if (FLog.DEBUG) {
 			FLog.v("pruned %d files, %d bytes, %d ms", prunedFiles, (mTotalSize - before),
 					SystemClock.elapsedRealtime() - startTime);
 		}
 	}
-	
+
 	/**
 	 * Puts the entry with the specified key into the cache.
 	 * 
@@ -317,7 +312,7 @@ public class DiskBasedCache implements Cache {
 		}
 		mEntries.put(key, entry);
 	}
-	
+
 	/**
 	 * Removes the entry identified by 'key' from the cache.
 	 */
@@ -328,7 +323,7 @@ public class DiskBasedCache implements Cache {
 			mEntries.remove(key);
 		}
 	}
-	
+
 	/**
 	 * Reads the contents of an InputStream into a byte[].
 	 */
@@ -344,7 +339,7 @@ public class DiskBasedCache implements Cache {
 		}
 		return bytes;
 	}
-	
+
 	/**
 	 * Handles holding onto the cache headers for an entry.
 	 */
@@ -354,28 +349,28 @@ public class DiskBasedCache implements Cache {
 		 * serialized to disk.
 		 */
 		public long					size;
-		
+
 		/** The key that identifies the cache entry. */
 		public String				key;
-		
+
 		/** ETag for cache coherence. */
 		public String				etag;
-		
+
 		/** Date of this response as reported by the server. */
 		public long					serverDate;
-		
+
 		/** TTL for this record. */
 		public long					ttl;
-		
+
 		/** Soft TTL for this record. */
 		public long					softTtl;
-		
+
 		/** Headers from the response resulting in this cache entry. */
 		public Map<String, String>	responseHeaders;
-		
+
 		private CacheHeader() {
 		}
-		
+
 		/**
 		 * Instantiates a new CacheHeader object
 		 * 
@@ -393,7 +388,7 @@ public class DiskBasedCache implements Cache {
 			this.softTtl = entry.softTtl;
 			this.responseHeaders = entry.responseHeaders;
 		}
-		
+
 		/**
 		 * Reads the header off of an InputStream and returns a CacheHeader
 		 * object.
@@ -421,7 +416,7 @@ public class DiskBasedCache implements Cache {
 			entry.responseHeaders = readStringStringMap(ois);
 			return entry;
 		}
-		
+
 		/**
 		 * Creates a cache entry for the specified data.
 		 */
@@ -435,7 +430,7 @@ public class DiskBasedCache implements Cache {
 			e.responseHeaders = responseHeaders;
 			return e;
 		}
-		
+
 		/**
 		 * Writes the contents of this CacheHeader to the specified
 		 * OutputStream.
@@ -452,17 +447,17 @@ public class DiskBasedCache implements Cache {
 				writeStringStringMap(responseHeaders, oos);
 				oos.flush();
 				return true;
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				FLog.d("%s", e.toString());
 				return false;
 			}
 		}
-		
+
 		/**
 		 * Writes all entries of {@code map} into {@code oos}.
 		 */
-		private static void writeStringStringMap(Map<String, String> map, ObjectOutputStream oos) throws IOException {
+		private static void writeStringStringMap(Map<String, String> map, ObjectOutputStream oos)
+				throws IOException {
 			if (map != null) {
 				oos.writeInt(map.size());
 				for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -473,12 +468,14 @@ public class DiskBasedCache implements Cache {
 				oos.writeInt(0);
 			}
 		}
-		
+
 		/**
-		 * @return a string to string map which contains the entries read from {@code ois}
-		 *         previously written by {@link #writeStringStringMap}
+		 * @return a string to string map which contains the entries read from
+		 *         {@code ois} previously written by
+		 *         {@link #writeStringStringMap}
 		 */
-		private static Map<String, String> readStringStringMap(ObjectInputStream ois) throws IOException {
+		private static Map<String, String> readStringStringMap(ObjectInputStream ois)
+				throws IOException {
 			int size = ois.readInt();
 			Map<String, String> result = (size == 0) ? Collections.<String, String> emptyMap()
 					: new HashMap<String, String>(size);
@@ -490,14 +487,14 @@ public class DiskBasedCache implements Cache {
 			return result;
 		}
 	}
-	
+
 	private static class CountingInputStream extends FilterInputStream {
 		private int	bytesRead	= 0;
-		
+
 		private CountingInputStream(InputStream in) {
 			super(in);
 		}
-		
+
 		@Override
 		public int read() throws IOException {
 			int result = super.read();
@@ -506,7 +503,7 @@ public class DiskBasedCache implements Cache {
 			}
 			return result;
 		}
-		
+
 		@Override
 		public int read(byte[] buffer, int offset, int count) throws IOException {
 			int result = super.read(buffer, offset, count);

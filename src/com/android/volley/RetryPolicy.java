@@ -17,17 +17,17 @@ package com.android.volley;
  * Retry policy for a request.
  */
 public interface RetryPolicy {
-	
+
 	/**
 	 * Returns the current timeout (used for logging).
 	 */
 	public int getCurrentTimeout();
-	
+
 	/**
 	 * Returns the current retry count (used for logging).
 	 */
 	public int getCurrentRetryCount();
-	
+
 	/**
 	 * Prepares for the next retry by applying a backoff to the timeout.
 	 * 
