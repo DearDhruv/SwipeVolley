@@ -1,9 +1,12 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -54,32 +57,28 @@ import java.util.List;
  */
 public class ByteArrayPool {
 	/** The buffer pool, arranged both by last use and by buffer size */
-	private List<byte[]>						mBuffersByLastUse	= new LinkedList<byte[]>();
-	private List<byte[]>						mBuffersBySize		= new ArrayList<byte[]>(64);
+	private List<byte[]> mBuffersByLastUse = new LinkedList<byte[]>();
+	private List<byte[]> mBuffersBySize = new ArrayList<byte[]>(64);
 
 	/** The total size of the buffers in the pool */
-	private int									mCurrentSize		= 0;
+	private int mCurrentSize = 0;
 
 	/**
 	 * The maximum aggregate size of the buffers in the pool. Old buffers are
 	 * discarded to stay under this limit.
 	 */
-	private final int							mSizeLimit;
+	private final int mSizeLimit;
 
 	/** Compares buffers by size */
-	protected static final Comparator<byte[]>	BUF_COMPARATOR		= new Comparator<byte[]>() {
-																		@Override
-																		public int compare(
-																				byte[] lhs,
-																				byte[] rhs) {
-																			return lhs.length
-																					- rhs.length;
-																		}
-																	};
+	protected static final Comparator<byte[]> BUF_COMPARATOR = new Comparator<byte[]>() {
+		@Override
+		public int compare(byte[] lhs, byte[] rhs) {
+			return lhs.length - rhs.length;
+		}
+	};
 
 	/**
-	 * @param sizeLimit
-	 *            the maximum size of the pool, in bytes
+	 * @param sizeLimit the maximum size of the pool, in bytes
 	 */
 	public ByteArrayPool(int sizeLimit) {
 		mSizeLimit = sizeLimit;
@@ -89,8 +88,7 @@ public class ByteArrayPool {
 	 * Returns a buffer from the pool if one is available in the requested size,
 	 * or allocates a new one if a pooled one is not available.
 	 * 
-	 * @param len
-	 *            the minimum size, in bytes, of the requested buffer. The
+	 * @param len the minimum size, in bytes, of the requested buffer. The
 	 *            returned buffer may be larger.
 	 * @return a byte[] buffer is always returned.
 	 */
@@ -111,8 +109,7 @@ public class ByteArrayPool {
 	 * Returns a buffer to the pool, throwing away old buffers if the pool would
 	 * exceed its allotted size.
 	 * 
-	 * @param buf
-	 *            the buffer to return to the pool.
+	 * @param buf the buffer to return to the pool.
 	 */
 	public synchronized void returnBuf(byte[] buf) {
 		if (buf == null || buf.length > mSizeLimit) {

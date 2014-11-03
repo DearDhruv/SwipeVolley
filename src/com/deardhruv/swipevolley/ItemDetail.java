@@ -5,8 +5,8 @@ import java.io.Serializable;
 
 public class ItemDetail implements Serializable {
 
-	private static final long	serialVersionUID	= -7866770526789880505L;
-	private String				name, imgUrl;
+	private static final long serialVersionUID = -7866770526789880505L;
+	private String name, imgUrl;
 
 	public String getImgUrl() {
 		return imgUrl;

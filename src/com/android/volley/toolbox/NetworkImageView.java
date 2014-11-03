@@ -1,12 +1,17 @@
 /**
- * Copyright (C) 2013 The Android Open Source Project Licensed under the Apache
- * License, Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
- * or agreed to in writing, software distributed under the License is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
+ * Copyright (C) 2013 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.android.volley.toolbox;
@@ -14,6 +19,7 @@ package com.android.volley.toolbox;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
@@ -26,24 +32,24 @@ import com.android.volley.toolbox.ImageLoader.ImageListener;
  */
 public class NetworkImageView extends ImageView {
 	/** The URL of the network image to load */
-	private String			mUrl;
+	private String mUrl;
 
 	/**
 	 * Resource ID of the image to be used as a placeholder until the network
 	 * image is loaded.
 	 */
-	private int				mDefaultImageId;
+	private int mDefaultImageId;
 
 	/**
 	 * Resource ID of the image to be used if the network response fails.
 	 */
-	private int				mErrorImageId;
+	private int mErrorImageId;
 
 	/** Local copy of the ImageLoader. */
-	private ImageLoader		mImageLoader;
+	private ImageLoader mImageLoader;
 
 	/** Current ImageContainer. (either in-flight or finished) */
-	private ImageContainer	mImageContainer;
+	private ImageContainer mImageContainer;
 
 	public NetworkImageView(Context context) {
 		this(context, null);
@@ -66,10 +72,8 @@ public class NetworkImageView extends ImageView {
 	 * {@link NetworkImageView#setErrorImageResId(int)} should be called prior
 	 * to calling this function.
 	 * 
-	 * @param url
-	 *            The URL that should be loaded into this ImageView.
-	 * @param imageLoader
-	 *            ImageLoader that will be used to make the request.
+	 * @param url The URL that should be loaded into this ImageView.
+	 * @param imageLoader ImageLoader that will be used to make the request.
 	 */
 	public void setImageUrl(String url, ImageLoader imageLoader) {
 		mUrl = url;
@@ -97,18 +101,23 @@ public class NetworkImageView extends ImageView {
 	/**
 	 * Loads the image for the view if it isn't already loaded.
 	 * 
-	 * @param isInLayoutPass
-	 *            True if this was invoked from a layout pass, false otherwise.
+	 * @param isInLayoutPass True if this was invoked from a layout pass, false
+	 *            otherwise.
 	 */
-	private void loadImageIfNecessary(final boolean isInLayoutPass) {
+	void loadImageIfNecessary(final boolean isInLayoutPass) {
 		int width = getWidth();
 		int height = getHeight();
 
-		boolean isFullyWrapContent = getLayoutParams().height == android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-				&& getLayoutParams().width == android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+		boolean wrapWidth = false, wrapHeight = false;
+		if (getLayoutParams() != null) {
+			wrapWidth = getLayoutParams().width == LayoutParams.WRAP_CONTENT;
+			wrapHeight = getLayoutParams().height == LayoutParams.WRAP_CONTENT;
+		}
+
 		// if the view's bounds aren't known yet, and this is not a
 		// wrap-content/wrap-content
 		// view, hold off on loading the image.
+		boolean isFullyWrapContent = wrapWidth && wrapHeight;
 		if (width == 0 && height == 0 && !isFullyWrapContent) {
 			return;
 		}
@@ -121,7 +130,7 @@ public class NetworkImageView extends ImageView {
 				mImageContainer.cancelRequest();
 				mImageContainer = null;
 			}
-			setImageBitmap(null);
+			setDefaultImageOrNull();
 			return;
 		}
 
@@ -135,9 +144,14 @@ public class NetworkImageView extends ImageView {
 				// if there is a pre-existing request, cancel it if it's
 				// fetching a different URL.
 				mImageContainer.cancelRequest();
-				setImageBitmap(null);
+				setDefaultImageOrNull();
 			}
 		}
+
+		// Calculate the max image width / height to use while ignoring
+		// WRAP_CONTENT dimens.
+		int maxWidth = wrapWidth ? 0 : width;
+		int maxHeight = wrapHeight ? 0 : height;
 
 		// The pre-existing content of this view didn't match the current URL.
 		// Load the new image
@@ -151,9 +165,7 @@ public class NetworkImageView extends ImageView {
 			}
 
 			@Override
-			public void onResponse(final ImageContainer response, boolean isImmediate,
-					boolean shouldAnimate) {
-
+			public void onResponse(final ImageContainer response, boolean isImmediate) {
 				// If this was an immediate response that was delivered inside
 				// of a layout
 				// pass do not set the image immediately as it will trigger a
@@ -165,7 +177,7 @@ public class NetworkImageView extends ImageView {
 					post(new Runnable() {
 						@Override
 						public void run() {
-							onResponse(response, false, true);
+							onResponse(response, false);
 						}
 					});
 					return;
@@ -177,10 +189,18 @@ public class NetworkImageView extends ImageView {
 					setImageResource(mDefaultImageId);
 				}
 			}
-		});
+		}, maxWidth, maxHeight);
 
 		// update the ImageContainer to be the new bitmap container.
 		mImageContainer = newContainer;
+	}
+
+	private void setDefaultImageOrNull() {
+		if (mDefaultImageId != 0) {
+			setImageResource(mDefaultImageId);
+		} else {
+			setImageBitmap(null);
+		}
 	}
 
 	@Override

@@ -17,9 +17,9 @@ import com.android.volley.toolbox.NetworkImageView;
 
 public class LazyAdapter extends BaseAdapter {
 
-	private Activity				activity;
-	private static LayoutInflater	inflater	= null;
-	private ArrayList<ItemDetail>	mList;
+	private Activity activity;
+	private static LayoutInflater inflater = null;
+	private ArrayList<ItemDetail> mList;
 
 	public LazyAdapter(Activity a, List<ItemDetail> list) {
 		activity = a;
@@ -63,7 +63,7 @@ public class LazyAdapter extends BaseAdapter {
 	}
 
 	class ViewHolder {
-		TextView			text;
-		NetworkImageView	image;
+		TextView text;
+		NetworkImageView image;
 	}
 }

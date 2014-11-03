@@ -1,9 +1,12 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,9 +29,9 @@ public class PoolingByteArrayOutputStream extends ByteArrayOutputStream {
 	 * is called, this is the default size to which the underlying byte array is
 	 * initialized.
 	 */
-	private static final int	DEFAULT_SIZE	= 256;
+	private static final int DEFAULT_SIZE = 256;
 
-	private final ByteArrayPool	mPool;
+	private final ByteArrayPool mPool;
 
 	/**
 	 * Constructs a new PoolingByteArrayOutputStream with a default size. If
@@ -44,8 +47,7 @@ public class PoolingByteArrayOutputStream extends ByteArrayOutputStream {
 	 * {@code size} bytes. If more than {@code size} bytes are written to this
 	 * instance, the underlying byte array will expand.
 	 * 
-	 * @param size
-	 *            initial size for the underlying byte array. The value will be
+	 * @param size initial size for the underlying byte array. The value will be
 	 *            pinned to a default minimum size.
 	 */
 	public PoolingByteArrayOutputStream(ByteArrayPool pool, int size) {

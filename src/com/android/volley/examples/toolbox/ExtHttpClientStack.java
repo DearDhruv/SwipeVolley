@@ -48,9 +48,9 @@ import com.android.volley.Request.Method;
 import com.android.volley.toolbox.HttpStack;
 
 public class ExtHttpClientStack implements HttpStack {
-	protected final HttpClient	mClient;
+	protected final HttpClient mClient;
 
-	private final static String	HEADER_CONTENT_TYPE	= "Content-Type";
+	private final static String HEADER_CONTENT_TYPE = "Content-Type";
 
 	public ExtHttpClientStack(HttpClient client) {
 		mClient = client;

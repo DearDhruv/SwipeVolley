@@ -15,10 +15,10 @@ import com.deardhruv.swipevolley.MainActivity.IUpdateImageView;
 
 @SuppressLint("ValidFragment")
 public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
-	View				fragView;
-	NetworkImageView	imagePreview;
-	TextView			txtName;
-	ItemDetail			sharedItemArg;
+	View fragView;
+	NetworkImageView imagePreview;
+	TextView txtName;
+	ItemDetail sharedItemArg;
 
 	public ImagePreviewFrag() {
 	}

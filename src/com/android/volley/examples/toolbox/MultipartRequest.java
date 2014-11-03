@@ -13,22 +13,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.examples.toolbox.updated.FLog;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 
 public class MultipartRequest extends Request<JSONObject> {
 
-	private MultipartEntity						entity			= new MultipartEntity();
-	private static String						FILE_PART_NAME	= "";
+	private MultipartEntity entity = new MultipartEntity();
+	private static String FILE_PART_NAME = "";
 
-	private final Response.Listener<JSONObject>	mListener;
-	private final File							mFilePart;
+	private final Response.Listener<JSONObject> mListener;
+	private File mFilePart;
 
 	public MultipartRequest(String url, Response.ErrorListener errorListener,
 			Response.Listener<JSONObject> listener, String key, File file, Bundle parameters) {
@@ -39,9 +40,48 @@ public class MultipartRequest extends Request<JSONObject> {
 		buildMultipartEntity(parameters);
 	}
 
+	/**
+	 * @param url
+	 * @param errorListener
+	 * @param listener
+	 * @param fileBundle Bundle with key param and file paths.
+	 * @param parameters
+	 */
+	public MultipartRequest(String url, Response.ErrorListener errorListener,
+			Response.Listener<JSONObject> listener, Bundle fileBundle, Bundle parameters) {
+		super(Method.POST, url, errorListener);
+		mListener = listener;
+		buildMultipartEntity(fileBundle, parameters);
+	}
+
 	private void buildMultipartEntity(Bundle parameters) {
 		entity = encodePOSTUrl(entity, parameters);
 		entity.addPart(FILE_PART_NAME, new FileBody(mFilePart));
+	}
+
+	private void buildMultipartEntity(Bundle fileBundle, Bundle parameters) {
+		entity = encodePOSTUrl(entity, parameters);
+
+		if (fileBundle != null && fileBundle.size() > 0) {
+			for (String key : fileBundle.keySet()) {
+				if (key != null) {
+
+					String value = "";
+					Object object = fileBundle.get(key);
+					if (object != null) {
+						value = String.valueOf(object);
+					}
+
+					try {
+						Log.i("System out", "Image path :" + key);
+						Log.i("System out", "Image path :" + value);
+						entity.addPart(key, new FileBody(new File(value)));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 
 	public static MultipartEntity encodePOSTUrl(MultipartEntity mEntity, Bundle parameters) {
@@ -79,7 +119,7 @@ public class MultipartRequest extends Request<JSONObject> {
 		try {
 			entity.writeTo(bos);
 		} catch (IOException e) {
-			FLog.e("IOException writing to ByteArrayOutputStream");
+			VolleyLog.e("IOException writing to ByteArrayOutputStream");
 		}
 		return bos.toByteArray();
 	}

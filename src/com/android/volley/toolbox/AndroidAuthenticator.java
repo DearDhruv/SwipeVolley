@@ -1,12 +1,17 @@
 /*
- * Copyright (C) 2011 The Android Open Source Project Licensed under the Apache
- * License, Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
- * or agreed to in writing, software distributed under the License is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
+ * Copyright (C) 2011 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.android.volley.toolbox;
@@ -25,20 +30,17 @@ import com.android.volley.AuthFailureError;
  * specified type for a specified account.
  */
 public class AndroidAuthenticator implements Authenticator {
-	private final Context	mContext;
-	private final Account	mAccount;
-	private final String	mAuthTokenType;
-	private final boolean	mNotifyAuthFailure;
+	private final Context mContext;
+	private final Account mAccount;
+	private final String mAuthTokenType;
+	private final boolean mNotifyAuthFailure;
 
 	/**
 	 * Creates a new authenticator.
 	 * 
-	 * @param context
-	 *            Context for accessing AccountManager
-	 * @param account
-	 *            Account to authenticate as
-	 * @param authTokenType
-	 *            Auth token type passed to AccountManager
+	 * @param context Context for accessing AccountManager
+	 * @param account Account to authenticate as
+	 * @param authTokenType Auth token type passed to AccountManager
 	 */
 	public AndroidAuthenticator(Context context, Account account, String authTokenType) {
 		this(context, account, authTokenType, false);
@@ -47,14 +49,11 @@ public class AndroidAuthenticator implements Authenticator {
 	/**
 	 * Creates a new authenticator.
 	 * 
-	 * @param context
-	 *            Context for accessing AccountManager
-	 * @param account
-	 *            Account to authenticate as
-	 * @param authTokenType
-	 *            Auth token type passed to AccountManager
-	 * @param notifyAuthFailure
-	 *            Whether to raise a notification upon auth failure
+	 * @param context Context for accessing AccountManager
+	 * @param account Account to authenticate as
+	 * @param authTokenType Auth token type passed to AccountManager
+	 * @param notifyAuthFailure Whether to raise a notification upon auth
+	 *            failure
 	 */
 	public AndroidAuthenticator(Context context, Account account, String authTokenType,
 			boolean notifyAuthFailure) {
@@ -71,6 +70,7 @@ public class AndroidAuthenticator implements Authenticator {
 		return mAccount;
 	}
 
+	// TODO: Figure out what to do about notifyAuthFailure
 	@SuppressWarnings("deprecation")
 	@Override
 	public String getAuthToken() throws AuthFailureError {

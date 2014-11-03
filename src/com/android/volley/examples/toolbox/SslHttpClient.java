@@ -26,14 +26,14 @@ import khandroid.ext.apache.http.impl.conn.PoolingClientConnectionManager;
 import khandroid.ext.apache.http.params.HttpParams;
 
 public class SslHttpClient extends DefaultHttpClient {
-	private static final int	HTTP_DEFAULT_PORT		= 80;
-	private static final String	HTTP_SCHEME				= "http";
-	private static final int	HTTP_DEFAULT_HTTPS_PORT	= 443;
-	private static final String	HTTP_SSL_SCHEME			= "https";
+	private static final int HTTP_DEFAULT_PORT = 80;
+	private static final String HTTP_SCHEME = "http";
+	private static final int HTTP_DEFAULT_HTTPS_PORT = 443;
+	private static final String HTTP_SSL_SCHEME = "https";
 
-	private InputStream			mKeyStore;
-	private String				mKeyStorePassword;
-	private int					mHttpsPort;
+	private InputStream mKeyStore;
+	private String mKeyStorePassword;
+	private int mHttpsPort;
 
 	public SslHttpClient(InputStream keyStore, String keyStorePassword) {
 		mKeyStore = keyStore;

@@ -1,6 +1,20 @@
+/*
+ * Copyright (C) 2011 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-
-package com.android.volley.examples.toolbox.updated;
+package com.android.volley;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,43 +23,24 @@ import java.util.Locale;
 import android.os.SystemClock;
 import android.util.Log;
 
-/**
- * Logs
- * 
- * @author DearDhruv
- */
-public class FLog {
-	public static boolean	DEBUG	= false;
-	public static String	TAG		= "Volley";
+/** Logging helper class. */
+public class VolleyLog {
+	public static String TAG = "Volley";
 
-	public static void e(String tag, String msg) {
-		if (DEBUG) {
-			Log.e(tag, msg);
-		}
-	}
+	public static boolean DEBUG = Log.isLoggable(TAG, Log.VERBOSE);
 
-	public static void i(String tag, String msg) {
-		if (DEBUG) {
-			Log.i(tag, msg);
-		}
-	}
+	/**
+	 * Customize the log tag for your application, so that other apps using
+	 * Volley don't mix their logs with yours. <br />
+	 * Enable the log property for your tag before starting your app: <br />
+	 * {@code adb shell setprop log.tag.&lt;tag&gt;}
+	 */
+	public static void setTag(String tag) {
+		d("Changing log tag to %s", tag);
+		TAG = tag;
 
-	public static void w(String tag, String msg) {
-		if (DEBUG) {
-			Log.w(tag, msg);
-		}
-	}
-
-	public static void d(String tag, String msg) {
-		if (DEBUG) {
-			Log.d(tag, msg);
-		}
-	}
-
-	public static void e(String tag, String msg, Throwable tr) {
-		if (DEBUG) {
-			Log.e(tag, msg, tr);
-		}
+		// Reinitialize the DEBUG "constant"
+		DEBUG = Log.isLoggable(TAG, Log.VERBOSE);
 	}
 
 	public static void v(String format, Object... args) {
@@ -83,11 +78,11 @@ public class FLog {
 		StackTraceElement[] trace = new Throwable().fillInStackTrace().getStackTrace();
 
 		String caller = "<unknown>";
-		// Walk up the stack looking for the first caller outside of FLog.
+		// Walk up the stack looking for the first caller outside of VolleyLog.
 		// It will be at least two frames up, so start there.
 		for (int i = 2; i < trace.length; i++) {
 			Class<?> clazz = trace[i].getClass();
-			if (!clazz.equals(FLog.class)) {
+			if (!clazz.equals(VolleyLog.class)) {
 				String callingClass = trace[i].getClassName();
 				callingClass = callingClass.substring(callingClass.lastIndexOf('.') + 1);
 				callingClass = callingClass.substring(callingClass.lastIndexOf('$') + 1);
@@ -103,19 +98,19 @@ public class FLog {
 	 * A simple event log with records containing a name, thread ID, and
 	 * timestamp.
 	 */
-	public static class MarkerLog {
-		public static final boolean	ENABLED						= DEBUG;
+	static class MarkerLog {
+		public static final boolean ENABLED = VolleyLog.DEBUG;
 
 		/**
 		 * Minimum duration from first marker to last in an marker log to
 		 * warrant logging.
 		 */
-		private static final long	MIN_DURATION_FOR_LOGGING_MS	= 0;
+		private static final long MIN_DURATION_FOR_LOGGING_MS = 0;
 
 		private static class Marker {
-			public final String	name;
-			public final long	thread;
-			public final long	time;
+			public final String name;
+			public final long thread;
+			public final long time;
 
 			public Marker(String name, long thread, long time) {
 				this.name = name;
@@ -124,8 +119,8 @@ public class FLog {
 			}
 		}
 
-		private final List<Marker>	mMarkers	= new ArrayList<Marker>();
-		private boolean				mFinished	= false;
+		private final List<Marker> mMarkers = new ArrayList<Marker>();
+		private boolean mFinished = false;
 
 		/** Adds a marker to this log with the specified name. */
 		public synchronized void add(String name, long threadId) {
@@ -141,8 +136,7 @@ public class FLog {
 		 * the first and last markers is greater than
 		 * {@link #MIN_DURATION_FOR_LOGGING_MS}.
 		 * 
-		 * @param header
-		 *            Header string to print above the marker log.
+		 * @param header Header string to print above the marker log.
 		 */
 		public synchronized void finish(String header) {
 			mFinished = true;
@@ -185,6 +179,4 @@ public class FLog {
 			return last - first;
 		}
 	}
-
 }
-// >>>>

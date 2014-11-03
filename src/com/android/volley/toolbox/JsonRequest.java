@@ -1,9 +1,12 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,26 +23,24 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
-import com.android.volley.examples.toolbox.updated.FLog;
+import com.android.volley.VolleyLog;
 
 /**
  * A request for retrieving a T type response body at a given URL that also
  * optionally sends along a JSON body in the request specified.
  * 
- * @param <T>
- *            JSON type of response expected
+ * @param <T> JSON type of response expected
  */
 public abstract class JsonRequest<T> extends Request<T> {
 	/** Charset for request. */
-	private static final String	PROTOCOL_CHARSET		= "utf-8";
+	private static final String PROTOCOL_CHARSET = "utf-8";
 
 	/** Content type for request. */
-	private static final String	PROTOCOL_CONTENT_TYPE	= String.format(
-																"application/json; charset=%s",
-																PROTOCOL_CHARSET);
+	private static final String PROTOCOL_CONTENT_TYPE = String.format(
+			"application/json; charset=%s", PROTOCOL_CHARSET);
 
-	private final Listener<T>	mListener;
-	private final String		mRequestBody;
+	private final Listener<T> mListener;
+	private final String mRequestBody;
 
 	/**
 	 * Deprecated constructor for a JsonRequest which defaults to GET unless
@@ -99,7 +100,7 @@ public abstract class JsonRequest<T> extends Request<T> {
 		try {
 			return mRequestBody == null ? null : mRequestBody.getBytes(PROTOCOL_CHARSET);
 		} catch (UnsupportedEncodingException uee) {
-			FLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
+			VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
 					mRequestBody, PROTOCOL_CHARSET);
 			return null;
 		}

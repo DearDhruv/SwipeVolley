@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -20,9 +21,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
  * 
  * @author DearDhruv
  */
-public class JSONRequestResponse {
+public class JSONMultipleImgRequestResponse {
+	boolean hasMultipleFiles = false;
 
-	public JSONRequestResponse(Context cntx) {
+	public JSONMultipleImgRequestResponse(Context cntx) {
 		mContext = cntx;
 	}
 
@@ -33,6 +35,7 @@ public class JSONRequestResponse {
 
 	private boolean isFile = false;
 	private String file_path = "", key = "";
+	private Bundle fileBundle;
 
 	public void getResponse(String url, final int requestCode, IJSONParseListener mParseListener) {
 		getResponse(url, requestCode, mParseListener, null);
@@ -68,8 +71,14 @@ public class JSONRequestResponse {
 		} else {
 			if (file_path != null) {
 				File mFile = new File(file_path);
-				MultipartRequest multipartRequest = new MultipartRequest(url, eListener, sListener,
-						key, mFile, params);
+				MultipartRequest multipartRequest;
+				if (hasMultipleFiles) {
+					multipartRequest = new MultipartRequest(url, eListener, sListener, fileBundle,
+							params);
+				} else {
+					multipartRequest = new MultipartRequest(url, eListener, sListener, key, mFile,
+							params);
+				}
 				MyVolley.getRequestQueue().add(multipartRequest);
 			} else {
 				throw new NullPointerException("File path is null");
@@ -88,6 +97,7 @@ public class JSONRequestResponse {
 	 * @param isFile the File to set
 	 */
 	public void setFile(String param, String path) {
+		hasMultipleFiles = false;
 		if (path != null && param != null) {
 			key = param;
 			file_path = path;
@@ -95,4 +105,28 @@ public class JSONRequestResponse {
 		}
 	}
 
+	public void setFile(Bundle b) {
+		hasMultipleFiles = true;
+		fileBundle = b;
+		this.isFile = true;
+		if (fileBundle != null && fileBundle.size() > 0) {
+			for (String key : fileBundle.keySet()) {
+				if (key != null) {
+
+					String value = "";
+					Object object = fileBundle.get(key);
+					if (object != null) {
+						value = String.valueOf(object);
+					}
+
+					try {
+						Log.i("System out", "Image path :-" + key);
+						Log.i("System out", "Image path :-" + value);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
 }

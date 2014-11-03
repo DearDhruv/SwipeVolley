@@ -1,9 +1,12 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,13 +25,12 @@ import android.os.Handler;
  */
 public class ExecutorDelivery implements ResponseDelivery {
 	/** Used for posting responses, typically to the main thread. */
-	private final Executor	mResponsePoster;
+	private final Executor mResponsePoster;
 
 	/**
 	 * Creates a new response delivery interface.
 	 * 
-	 * @param handler
-	 *            {@link Handler} to post responses on
+	 * @param handler {@link Handler} to post responses on
 	 */
 	public ExecutorDelivery(final Handler handler) {
 		// Make an Executor that just wraps the handler.
@@ -43,8 +45,7 @@ public class ExecutorDelivery implements ResponseDelivery {
 	/**
 	 * Creates a new response delivery interface, mockable version for testing.
 	 * 
-	 * @param executor
-	 *            For running delivery tasks
+	 * @param executor For running delivery tasks
 	 */
 	public ExecutorDelivery(Executor executor) {
 		mResponsePoster = executor;
@@ -75,9 +76,9 @@ public class ExecutorDelivery implements ResponseDelivery {
 	 */
 	@SuppressWarnings("rawtypes")
 	private class ResponseDeliveryRunnable implements Runnable {
-		private final Request	mRequest;
-		private final Response	mResponse;
-		private final Runnable	mRunnable;
+		private final Request mRequest;
+		private final Response mResponse;
+		private final Runnable mRunnable;
 
 		public ResponseDeliveryRunnable(Request request, Response response, Runnable runnable) {
 			mRequest = request;

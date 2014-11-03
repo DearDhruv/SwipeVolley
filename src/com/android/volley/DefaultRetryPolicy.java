@@ -1,9 +1,12 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,25 +21,25 @@ package com.android.volley;
  */
 public class DefaultRetryPolicy implements RetryPolicy {
 	/** The current timeout in milliseconds. */
-	private int					mCurrentTimeoutMs;
+	private int mCurrentTimeoutMs;
 
 	/** The current retry count. */
-	private int					mCurrentRetryCount;
+	private int mCurrentRetryCount;
 
 	/** The maximum number of attempts. */
-	private final int			mMaxNumRetries;
+	private final int mMaxNumRetries;
 
 	/** The backoff multiplier for for the policy. */
-	private final float			mBackoffMultiplier;
+	private final float mBackoffMultiplier;
 
 	/** The default socket timeout in milliseconds */
-	public static final int		DEFAULT_TIMEOUT_MS		= 2500;
+	public static final int DEFAULT_TIMEOUT_MS = 2500;
 
 	/** The default number of retries */
-	public static final int		DEFAULT_MAX_RETRIES		= 1;
+	public static final int DEFAULT_MAX_RETRIES = 1;
 
 	/** The default backoff multiplier */
-	public static final float	DEFAULT_BACKOFF_MULT	= 1f;
+	public static final float DEFAULT_BACKOFF_MULT = 1f;
 
 	/**
 	 * Constructs a new retry policy using the default timeouts.
@@ -48,12 +51,9 @@ public class DefaultRetryPolicy implements RetryPolicy {
 	/**
 	 * Constructs a new retry policy.
 	 * 
-	 * @param initialTimeoutMs
-	 *            The initial timeout for the policy.
-	 * @param maxNumRetries
-	 *            The maximum number of retries.
-	 * @param backoffMultiplier
-	 *            Backoff multiplier for the policy.
+	 * @param initialTimeoutMs The initial timeout for the policy.
+	 * @param maxNumRetries The maximum number of retries.
+	 * @param backoffMultiplier Backoff multiplier for the policy.
 	 */
 	public DefaultRetryPolicy(int initialTimeoutMs, int maxNumRetries, float backoffMultiplier) {
 		mCurrentTimeoutMs = initialTimeoutMs;
@@ -80,8 +80,7 @@ public class DefaultRetryPolicy implements RetryPolicy {
 	/**
 	 * Prepares for the next retry by applying a backoff to the timeout.
 	 * 
-	 * @param error
-	 *            The error code of the last attempt.
+	 * @param error The error code of the last attempt.
 	 */
 	@Override
 	public void retry(VolleyError error) throws VolleyError {

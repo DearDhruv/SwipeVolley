@@ -26,9 +26,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 public class GsonRequest<T> extends Request<T> {
-	private final Gson			mGson;
-	private final Class<T>		mClazz;
-	private final Listener<T>	mListener;
+	private final Gson mGson;
+	private final Class<T> mClazz;
+	private final Listener<T> mListener;
 
 	public GsonRequest(int method, String url, Class<T> clazz, Listener<T> listener,
 			ErrorListener errorListener) {

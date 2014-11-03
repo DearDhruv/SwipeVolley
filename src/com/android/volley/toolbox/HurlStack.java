@@ -1,9 +1,12 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,7 +48,7 @@ import com.android.volley.Request.Method;
  */
 public class HurlStack implements HttpStack {
 
-	private static final String	HEADER_CONTENT_TYPE	= "Content-Type";
+	private static final String HEADER_CONTENT_TYPE = "Content-Type";
 
 	/**
 	 * An interface for transforming URLs before use.
@@ -58,26 +61,23 @@ public class HurlStack implements HttpStack {
 		public String rewriteUrl(String originalUrl);
 	}
 
-	private final UrlRewriter		mUrlRewriter;
-	private final SSLSocketFactory	mSslSocketFactory;
+	private final UrlRewriter mUrlRewriter;
+	private final SSLSocketFactory mSslSocketFactory;
 
 	public HurlStack() {
 		this(null);
 	}
 
 	/**
-	 * @param urlRewriter
-	 *            Rewriter to use for request URLs
+	 * @param urlRewriter Rewriter to use for request URLs
 	 */
 	public HurlStack(UrlRewriter urlRewriter) {
 		this(urlRewriter, null);
 	}
 
 	/**
-	 * @param urlRewriter
-	 *            Rewriter to use for request URLs
-	 * @param sslSocketFactory
-	 *            SSL factory to use for HTTPS connections
+	 * @param urlRewriter Rewriter to use for request URLs
+	 * @param sslSocketFactory SSL factory to use for HTTPS connections
 	 */
 	public HurlStack(UrlRewriter urlRewriter, SSLSocketFactory sslSocketFactory) {
 		mUrlRewriter = urlRewriter;
@@ -221,6 +221,19 @@ public class HurlStack implements HttpStack {
 				break;
 			case Method.PUT:
 				connection.setRequestMethod("PUT");
+				addBodyIfExists(connection, request);
+				break;
+			case Method.HEAD:
+				connection.setRequestMethod("HEAD");
+				break;
+			case Method.OPTIONS:
+				connection.setRequestMethod("OPTIONS");
+				break;
+			case Method.TRACE:
+				connection.setRequestMethod("TRACE");
+				break;
+			case Method.PATCH:
+				connection.setRequestMethod("PATCH");
 				addBodyIfExists(connection, request);
 				break;
 			default:

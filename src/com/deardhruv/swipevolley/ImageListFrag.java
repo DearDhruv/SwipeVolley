@@ -27,12 +27,12 @@ import com.android.volley.examples.toolbox.updated.JSONRequestResponse;
  * A fragment which displays the List of the images.
  */
 public class ImageListFrag extends Fragment implements IJSONParseListener, OnItemClickListener {
-	private static final int	CODE_IMG_LIST	= 101;
+	private static final int CODE_IMG_LIST = 101;
 
-	ProgressDialog				pd;
-	ListView					list;
-	LazyAdapter					adapter;
-	View						fragView;
+	ProgressDialog pd;
+	ListView list;
+	LazyAdapter adapter;
+	View fragView;
 
 	public ImageListFrag() {
 	}
@@ -56,7 +56,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		super.onDestroy();
 	}
 
-	boolean	isImageChanged	= false;
+	boolean isImageChanged = false;
 
 	void getImages(Context mContext) {
 		pd = ProgressDialog.show(mContext, "Please wait", "getting images...");
@@ -90,7 +90,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		}
 	}
 
-	ArrayList<ItemDetail>	mList	= null;
+	ArrayList<ItemDetail> mList = null;
 
 	@Override
 	public void SuccessResponse(JSONObject response, int requestCode) {
@@ -131,7 +131,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		public void shareItem(ItemDetail viewItem);
 	}
 
-	ShareViewItem	mCallback	= null;
+	ShareViewItem mCallback = null;
 
 	@Override
 	public void onAttach(Activity activity) {

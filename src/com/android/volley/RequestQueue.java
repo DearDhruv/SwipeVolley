@@ -1,9 +1,12 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,22 +28,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.android.volley.examples.toolbox.updated.FLog;
-
 /**
  * A request dispatch queue with a thread pool of dispatchers. Calling
  * {@link #add(Request)} will enqueue the given Request for dispatch, resolving
  * from either cache or network on a worker thread, and then delivering a parsed
  * response on the main thread.
  */
-@SuppressWarnings("rawtypes")
 public class RequestQueue {
 
 	/**
 	 * Used for generating monotonically-increasing sequence numbers for
 	 * requests.
 	 */
-	private AtomicInteger							mSequenceGenerator					= new AtomicInteger();
+	private AtomicInteger mSequenceGenerator = new AtomicInteger();
 
 	/**
 	 * Staging area for requests that already have a duplicate request in
@@ -53,51 +53,48 @@ public class RequestQueue {
 	 * requests are staged.</li>
 	 * </ul>
 	 */
-	private final Map<String, Queue<Request>>		mWaitingRequests					= new HashMap<String, Queue<Request>>();
+	private final Map<String, Queue<Request<?>>> mWaitingRequests = new HashMap<String, Queue<Request<?>>>();
 
 	/**
 	 * The set of all requests currently being processed by this RequestQueue. A
 	 * Request will be in this set if it is waiting in any queue or currently
 	 * being processed by any dispatcher.
 	 */
-	private final Set<Request>						mCurrentRequests					= new HashSet<Request>();
+	private final Set<Request<?>> mCurrentRequests = new HashSet<Request<?>>();
 
 	/** The cache triage queue. */
-	private final PriorityBlockingQueue<Request>	mCacheQueue							= new PriorityBlockingQueue<Request>();
+	private final PriorityBlockingQueue<Request<?>> mCacheQueue = new PriorityBlockingQueue<Request<?>>();
 
 	/** The queue of requests that are actually going out to the network. */
-	private final PriorityBlockingQueue<Request>	mNetworkQueue						= new PriorityBlockingQueue<Request>();
+	private final PriorityBlockingQueue<Request<?>> mNetworkQueue = new PriorityBlockingQueue<Request<?>>();
 
 	/** Number of network request dispatcher threads to start. */
-	private static final int						DEFAULT_NETWORK_THREAD_POOL_SIZE	= 4;
+	private static final int DEFAULT_NETWORK_THREAD_POOL_SIZE = 4;
 
-	/** Cache interface for retrieving and storing respones. */
-	private final Cache								mCache;
+	/** Cache interface for retrieving and storing responses. */
+	private final Cache mCache;
 
 	/** Network interface for performing requests. */
-	private final Network							mNetwork;
+	private final Network mNetwork;
 
 	/** Response delivery mechanism. */
-	private final ResponseDelivery					mDelivery;
+	private final ResponseDelivery mDelivery;
 
 	/** The network dispatchers. */
-	private NetworkDispatcher[]						mDispatchers;
+	private NetworkDispatcher[] mDispatchers;
 
 	/** The cache dispatcher. */
-	private CacheDispatcher							mCacheDispatcher;
+	private CacheDispatcher mCacheDispatcher;
 
 	/**
 	 * Creates the worker pool. Processing will not begin until {@link #start()}
 	 * is called.
 	 * 
-	 * @param cache
-	 *            A Cache to use for persisting responses to disk
-	 * @param network
-	 *            A Network interface for performing HTTP requests
-	 * @param threadPoolSize
-	 *            Number of network dispatcher threads to create
-	 * @param delivery
-	 *            A ResponseDelivery interface for posting responses and errors
+	 * @param cache A Cache to use for persisting responses to disk
+	 * @param network A Network interface for performing HTTP requests
+	 * @param threadPoolSize Number of network dispatcher threads to create
+	 * @param delivery A ResponseDelivery interface for posting responses and
+	 *            errors
 	 */
 	public RequestQueue(Cache cache, Network network, int threadPoolSize, ResponseDelivery delivery) {
 		mCache = cache;
@@ -110,12 +107,9 @@ public class RequestQueue {
 	 * Creates the worker pool. Processing will not begin until {@link #start()}
 	 * is called.
 	 * 
-	 * @param cache
-	 *            A Cache to use for persisting responses to disk
-	 * @param network
-	 *            A Network interface for performing HTTP requests
-	 * @param threadPoolSize
-	 *            Number of network dispatcher threads to create
+	 * @param cache A Cache to use for persisting responses to disk
+	 * @param network A Network interface for performing HTTP requests
+	 * @param threadPoolSize Number of network dispatcher threads to create
 	 */
 	public RequestQueue(Cache cache, Network network, int threadPoolSize) {
 		this(cache, network, threadPoolSize, new ExecutorDelivery(new Handler(
@@ -126,10 +120,8 @@ public class RequestQueue {
 	 * Creates the worker pool. Processing will not begin until {@link #start()}
 	 * is called.
 	 * 
-	 * @param cache
-	 *            A Cache to use for persisting responses to disk
-	 * @param network
-	 *            A Network interface for performing HTTP requests
+	 * @param cache A Cache to use for persisting responses to disk
+	 * @param network A Network interface for performing HTTP requests
 	 */
 	public RequestQueue(Cache cache, Network network) {
 		this(cache, network, DEFAULT_NETWORK_THREAD_POOL_SIZE);
@@ -193,8 +185,7 @@ public class RequestQueue {
 	/**
 	 * Cancels all requests in this queue for which the given filter applies.
 	 * 
-	 * @param filter
-	 *            The filtering function to use
+	 * @param filter The filtering function to use
 	 */
 	public void cancelAll(RequestFilter filter) {
 		synchronized (mCurrentRequests) {
@@ -225,11 +216,10 @@ public class RequestQueue {
 	/**
 	 * Adds a Request to the dispatch queue.
 	 * 
-	 * @param request
-	 *            The request to service
+	 * @param request The request to service
 	 * @return The passed-in request
 	 */
-	public Request add(Request request) {
+	public <T> Request<T> add(Request<T> request) {
 		// Tag the request as belonging to this queue and add it to the set of
 		// current requests.
 		request.setRequestQueue(this);
@@ -254,14 +244,14 @@ public class RequestQueue {
 			String cacheKey = request.getCacheKey();
 			if (mWaitingRequests.containsKey(cacheKey)) {
 				// There is already a request in flight. Queue up.
-				Queue<Request> stagedRequests = mWaitingRequests.get(cacheKey);
+				Queue<Request<?>> stagedRequests = mWaitingRequests.get(cacheKey);
 				if (stagedRequests == null) {
-					stagedRequests = new LinkedList<Request>();
+					stagedRequests = new LinkedList<Request<?>>();
 				}
 				stagedRequests.add(request);
 				mWaitingRequests.put(cacheKey, stagedRequests);
-				if (FLog.DEBUG) {
-					FLog.v("Request for cacheKey=%s is in flight, putting on hold.", cacheKey);
+				if (VolleyLog.DEBUG) {
+					VolleyLog.v("Request for cacheKey=%s is in flight, putting on hold.", cacheKey);
 				}
 			} else {
 				// Insert 'null' queue for this cacheKey, indicating there is
@@ -282,7 +272,7 @@ public class RequestQueue {
 	 * <code>request.shouldCache()</code>.
 	 * </p>
 	 */
-	void finish(Request request) {
+	void finish(Request<?> request) {
 		// Remove from the set of requests currently being processed.
 		synchronized (mCurrentRequests) {
 			mCurrentRequests.remove(request);
@@ -291,10 +281,10 @@ public class RequestQueue {
 		if (request.shouldCache()) {
 			synchronized (mWaitingRequests) {
 				String cacheKey = request.getCacheKey();
-				Queue<Request> waitingRequests = mWaitingRequests.remove(cacheKey);
+				Queue<Request<?>> waitingRequests = mWaitingRequests.remove(cacheKey);
 				if (waitingRequests != null) {
-					if (FLog.DEBUG) {
-						FLog.v("Releasing %d waiting requests for cacheKey=%s.",
+					if (VolleyLog.DEBUG) {
+						VolleyLog.v("Releasing %d waiting requests for cacheKey=%s.",
 								waitingRequests.size(), cacheKey);
 					}
 					// Process all queued up requests. They won't be considered

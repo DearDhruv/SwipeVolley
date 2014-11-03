@@ -13,8 +13,8 @@ import com.deardhruv.swipevolley.ImageListFrag.ShareViewItem;
 
 public class MainActivity extends FragmentActivity implements ShareViewItem {
 
-	SectionsPagerAdapter	mSectionsPagerAdapter;
-	ViewPager				mViewPager;
+	SectionsPagerAdapter mSectionsPagerAdapter;
+	ViewPager mViewPager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +35,8 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 		return true;
 	}
 
-	Bundle				arg;
-	ImagePreviewFrag	previewFrag;
+	Bundle arg;
+	ImagePreviewFrag previewFrag;
 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -89,7 +89,7 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 		}
 	}
 
-	IUpdateImageView	mCallback	= null;
+	IUpdateImageView mCallback = null;
 
 	public interface IUpdateImageView {
 		public void updateImagePreview(ItemDetail sharedItem);

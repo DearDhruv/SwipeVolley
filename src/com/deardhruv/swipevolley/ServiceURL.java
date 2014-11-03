@@ -13,9 +13,9 @@ import android.os.Bundle;
  */
 public class ServiceURL {
 
-	public static final String	INDENT		= "indent";
-	public static final String	IMAGE_URL	= "image_url";
-	public static final String	mainURL		= "https://raw.github.com/DearDhruv/SwipeVolley/master/json_res";
+	public static final String INDENT = "indent";
+	public static final String IMAGE_URL = "image_url";
+	public static final String mainURL = "https://raw.github.com/DearDhruv/SwipeVolley/master/json_res";
 
 	@SuppressWarnings("deprecation")
 	public static String encodeGETUrl(Bundle parameters) {
