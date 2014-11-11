@@ -2,7 +2,7 @@
  * 
  */
 
-package com.deardhruv.swipevolley;
+package com.deardhruv.swipevolley.network;
 
 import java.net.URLEncoder;
 

@@ -1,11 +1,11 @@
 
-package com.deardhruv.swipevolley;
+package com.deardhruv.swipevolley.model;
 
 import java.io.Serializable;
 
-public class ItemDetail implements Serializable {
+public class ImageItem implements Serializable {
 
-	private static final long serialVersionUID = -7866770526789880505L;
+	private static final long serialVersionUID = 1754973654774734018L;
 	private String name, imgUrl;
 
 	public String getImgUrl() {

@@ -1,5 +1,5 @@
 
-package com.deardhruv.swipevolley;
+package com.deardhruv.swipevolley.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -11,14 +11,16 @@ import android.widget.TextView;
 
 import com.android.volley.examples.toolbox.MyVolley;
 import com.android.volley.toolbox.NetworkImageView;
-import com.deardhruv.swipevolley.MainActivity.IUpdateImageView;
+import com.deardhruv.swipevolley.R;
+import com.deardhruv.swipevolley.activities.MainActivity.IUpdateImageView;
+import com.deardhruv.swipevolley.model.ImageItem;
 
 @SuppressLint("ValidFragment")
 public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 	View fragView;
 	NetworkImageView imagePreview;
 	TextView txtName;
-	ItemDetail sharedItemArg;
+	ImageItem sharedItemArg;
 
 	public ImagePreviewFrag() {
 	}
@@ -33,7 +35,7 @@ public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null)
-			sharedItemArg = (ItemDetail) getArguments().get("item");
+			sharedItemArg = (ImageItem) getArguments().get("item");
 	}
 
 	@Override
@@ -54,7 +56,7 @@ public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 	}
 
 	@Override
-	public void updateImagePreview(ItemDetail sharedItem) {
+	public void updateImagePreview(ImageItem sharedItem) {
 		if (sharedItem != null) {
 			imagePreview.setImageUrl(sharedItem.getImgUrl(), MyVolley.getImageLoader());
 			txtName.setText(sharedItem.getName());

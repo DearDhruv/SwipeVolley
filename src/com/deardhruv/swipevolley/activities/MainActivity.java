@@ -1,6 +1,7 @@
 
-package com.deardhruv.swipevolley;
+package com.deardhruv.swipevolley.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,8 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.MenuItem;
 
-import com.deardhruv.swipevolley.ImageListFrag.ShareViewItem;
+import com.deardhruv.swipevolley.R;
+import com.deardhruv.swipevolley.fragments.ImageListFrag;
+import com.deardhruv.swipevolley.fragments.ImageListFrag.ShareViewItem;
+import com.deardhruv.swipevolley.fragments.ImagePreviewFrag;
+import com.deardhruv.swipevolley.model.ImageItem;
 
 public class MainActivity extends FragmentActivity implements ShareViewItem {
 
@@ -32,6 +38,19 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.action_upload:
+				Intent mUploadIntent = new Intent(MainActivity.this, ImageUploadActivity.class);
+				startActivity(mUploadIntent);
+				break;
+			default:
+				break;
+		}
 		return true;
 	}
 
@@ -92,11 +111,11 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 	IUpdateImageView mCallback = null;
 
 	public interface IUpdateImageView {
-		public void updateImagePreview(ItemDetail sharedItem);
+		public void updateImagePreview(ImageItem sharedItem);
 	}
 
 	@Override
-	public void shareItem(final ItemDetail sharedItem) {
+	public void shareItem(final ImageItem sharedItem) {
 		// arg = new Bundle();
 		// arg.putSerializable("item", sharedItem);
 

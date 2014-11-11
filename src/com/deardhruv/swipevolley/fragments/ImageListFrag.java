@@ -1,5 +1,5 @@
 
-package com.deardhruv.swipevolley;
+package com.deardhruv.swipevolley.fragments;
 
 import java.util.ArrayList;
 
@@ -22,6 +22,10 @@ import android.widget.ListView;
 import com.android.volley.VolleyError;
 import com.android.volley.examples.toolbox.updated.IJSONParseListener;
 import com.android.volley.examples.toolbox.updated.JSONRequestResponse;
+import com.deardhruv.swipevolley.R;
+import com.deardhruv.swipevolley.adapters.ItemDetailAdapter;
+import com.deardhruv.swipevolley.model.ImageItem;
+import com.deardhruv.swipevolley.network.ServiceURL;
 
 /**
  * A fragment which displays the List of the images.
@@ -29,10 +33,10 @@ import com.android.volley.examples.toolbox.updated.JSONRequestResponse;
 public class ImageListFrag extends Fragment implements IJSONParseListener, OnItemClickListener {
 	private static final int CODE_IMG_LIST = 101;
 
-	ProgressDialog pd;
-	ListView list;
-	LazyAdapter adapter;
-	View fragView;
+	private ProgressDialog pd;
+	private ListView list;
+	private ItemDetailAdapter adapter;
+	private View fragView;
 
 	public ImageListFrag() {
 	}
@@ -56,8 +60,6 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		super.onDestroy();
 	}
 
-	boolean isImageChanged = false;
-
 	void getImages(Context mContext) {
 		pd = ProgressDialog.show(mContext, "Please wait", "getting images...");
 		if (!pd.isShowing()) {
@@ -65,19 +67,8 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		}
 
 		Bundle parms = new Bundle();
-		// parms.putString(ServiceURL.INDENT, "");
-
 		JSONRequestResponse mResponse = new JSONRequestResponse(mContext);
-		if (isImageChanged) {
-			// if (mImagePath != null) {
-			// mResponse.setFile(ServiceURL.IMAGE_URL, mImagePath);
-			// }
-			// mResponse.getResponse(ServiceURL.mainURL, CODE_IMG_LIST, this,
-			// parms);
-		} else {
-			mResponse.getResponse(ServiceURL.encodeUrl(ServiceURL.mainURL, parms), CODE_IMG_LIST,
-					this);
-		}
+		mResponse.getResponse(ServiceURL.encodeUrl(ServiceURL.mainURL, parms), CODE_IMG_LIST, this);
 	}
 
 	@Override
@@ -90,7 +81,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		}
 	}
 
-	ArrayList<ItemDetail> mList = null;
+	ArrayList<ImageItem> mList = null;
 
 	@Override
 	public void SuccessResponse(JSONObject response, int requestCode) {
@@ -99,28 +90,24 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		}
 
 		if (requestCode == CODE_IMG_LIST) {
-			// Log.d("reponse", "" + response.toString());
+			Log.d("reponse", "" + response.toString());
 			try {
 				JSONArray mJsonArray = new JSONArray(response.get("result").toString());
 				if (mJsonArray.length() > 0) {
-					mList = new ArrayList<ItemDetail>();
+					mList = new ArrayList<ImageItem>();
 					for (int i = 0; i < mJsonArray.length(); i++) {
-						ItemDetail itemDetail = new ItemDetail();
+						ImageItem itemDetail = new ImageItem();
 
 						itemDetail.setImgUrl(mJsonArray.getJSONObject(i).getString("img"));
 						itemDetail.setName(mJsonArray.getJSONObject(i).getString("name"));
 
 						mList.add(itemDetail);
-
-						if (i == 10) {
-							break;
-						}
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			adapter = new LazyAdapter(getActivity(), mList);
+			adapter = new ItemDetailAdapter(getActivity(), mList);
 			list.setAdapter(adapter);
 			list.setOnItemClickListener(ImageListFrag.this);
 		}
@@ -128,7 +115,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 
 	public interface ShareViewItem {
 		// Interface method you will call from this fragment
-		public void shareItem(ItemDetail viewItem);
+		public void shareItem(ImageItem viewItem);
 	}
 
 	ShareViewItem mCallback = null;
@@ -144,7 +131,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		}
 	}
 
-	public void changeImagePreview(ItemDetail itemDetail) {
+	public void changeImagePreview(ImageItem itemDetail) {
 
 		// Then use the interface callback to tell activity item is shared
 		if (mCallback != null) {

@@ -1,5 +1,5 @@
 
-package com.deardhruv.swipevolley;
+package com.deardhruv.swipevolley.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +14,18 @@ import android.widget.TextView;
 
 import com.android.volley.examples.toolbox.MyVolley;
 import com.android.volley.toolbox.NetworkImageView;
+import com.deardhruv.swipevolley.R;
+import com.deardhruv.swipevolley.model.ImageItem;
 
-public class LazyAdapter extends BaseAdapter {
+public class ItemDetailAdapter extends BaseAdapter {
 
 	private Activity activity;
 	private static LayoutInflater inflater = null;
-	private ArrayList<ItemDetail> mList;
+	private ArrayList<ImageItem> mList;
 
-	public LazyAdapter(Activity a, List<ItemDetail> list) {
+	public ItemDetailAdapter(Activity a, List<ImageItem> list) {
 		activity = a;
-		mList = new ArrayList<ItemDetail>(list);
+		mList = new ArrayList<ImageItem>(list);
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
