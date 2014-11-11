@@ -17,6 +17,7 @@
 package com.android.volley.toolbox;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.ViewGroup.LayoutParams;
@@ -51,6 +52,9 @@ public class NetworkImageView extends ImageView {
 	/** Current ImageContainer. (either in-flight or finished) */
 	private ImageContainer mImageContainer;
 
+	/** local bitmap variable */
+	private Bitmap bitmap;
+
 	public NetworkImageView(Context context) {
 		this(context, null);
 	}
@@ -61,6 +65,11 @@ public class NetworkImageView extends ImageView {
 
 	public NetworkImageView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
+	}
+
+	/** Call this methode to set local bitmap */
+	public void setLocalImageBitmap(Bitmap bitmap) {
+		this.bitmap = bitmap;
 	}
 
 	/**
@@ -198,6 +207,8 @@ public class NetworkImageView extends ImageView {
 	private void setDefaultImageOrNull() {
 		if (mDefaultImageId != 0) {
 			setImageResource(mDefaultImageId);
+		} else if (bitmap != null) {
+			setImageBitmap(bitmap);// local bitmap
 		} else {
 			setImageBitmap(null);
 		}
