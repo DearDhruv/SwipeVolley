@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.deardhruv.swipevolley.R;
 import com.deardhruv.swipevolley.fragments.ImageListFrag;
@@ -25,8 +26,11 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		setProgressBarIndeterminateVisibility(true);
+		
 		setContentView(R.layout.activity_main);
-
+		
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);

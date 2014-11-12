@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.volley.examples.toolbox.MyVolley;
-import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.NetworkImageTouchView;
 import com.deardhruv.swipevolley.R;
 import com.deardhruv.swipevolley.activities.MainActivity.IUpdateImageView;
 import com.deardhruv.swipevolley.model.ImageItem;
@@ -18,7 +18,8 @@ import com.deardhruv.swipevolley.model.ImageItem;
 @SuppressLint("ValidFragment")
 public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 	View fragView;
-	NetworkImageView imagePreview;
+	// NetworkImageView imagePreview;
+	NetworkImageTouchView imagePreview;
 	TextView txtName;
 	ImageItem sharedItemArg;
 
@@ -41,7 +42,7 @@ public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		fragView = inflater.inflate(R.layout.image_preview_layout, container, false);
-		imagePreview = (NetworkImageView) fragView.findViewById(R.id.imagePreview);
+		imagePreview = (NetworkImageTouchView) fragView.findViewById(R.id.imagePreview);
 		txtName = (TextView) fragView.findViewById(R.id.txtName);
 		return fragView;
 	}

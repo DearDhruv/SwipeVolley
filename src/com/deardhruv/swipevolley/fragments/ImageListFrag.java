@@ -65,6 +65,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		if (!pd.isShowing()) {
 			pd.show();
 		}
+		getActivity().setProgressBarIndeterminateVisibility(true);
 
 		Bundle parms = new Bundle();
 		JSONRequestResponse mResponse = new JSONRequestResponse(mContext);
@@ -76,6 +77,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		if (pd.isShowing()) {
 			pd.dismiss();
 		}
+		getActivity().setProgressBarIndeterminateVisibility(false);
 		if (requestCode == CODE_IMG_LIST) {
 			Log.e("error", "" + error.toString());
 		}
@@ -88,6 +90,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		if (pd.isShowing()) {
 			pd.dismiss();
 		}
+		getActivity().setProgressBarIndeterminateVisibility(false);
 
 		if (requestCode == CODE_IMG_LIST) {
 			Log.d("reponse", "" + response.toString());

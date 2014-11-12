@@ -100,6 +100,8 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 	 */
 	private static final long SLOW_REQUEST_THRESHOLD_MS = 3000;
 
+	private static final int MY_SOCKET_TIMEOUT_MS = 30 * 1000;
+
 	/** The retry policy for this request. */
 	private RetryPolicy mRetryPolicy;
 
@@ -140,7 +142,11 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 		mMethod = method;
 		mUrl = url;
 		mErrorListener = listener;
-		setRetryPolicy(new DefaultRetryPolicy());
+		// setRetryPolicy(new DefaultRetryPolicy()); 
+		setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS, 
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, 
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));                
 
 		mDefaultTrafficStatsTag = findDefaultTrafficStatsTag(url);
 	}
