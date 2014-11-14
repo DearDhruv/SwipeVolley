@@ -8,5 +8,6 @@
     <string name="title_section3">Section 3</string>
     <string name="action_upload_photo">Upload Photo</string>
     <string name="size_info">Below images has total size of 12 MB; be patient and let volley load the images.</string>
+    <string name="about_str">About Me</string>
 
 </resources>

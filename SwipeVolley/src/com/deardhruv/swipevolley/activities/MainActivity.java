@@ -2,6 +2,7 @@
 package com.deardhruv.swipevolley.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -28,9 +29,9 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setProgressBarIndeterminateVisibility(true);
-		
+
 		setContentView(R.layout.activity_main);
-		
+
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -51,6 +52,12 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 			case R.id.action_upload:
 				Intent mUploadIntent = new Intent(MainActivity.this, ImageUploadActivity.class);
 				startActivity(mUploadIntent);
+				break;
+
+			case R.id.action_about:
+				Intent mAboutIntent = new Intent(Intent.ACTION_VIEW,
+						Uri.parse("http://about.me/DearDhruv"));
+				startActivity(mAboutIntent);
 				break;
 			default:
 				break;
