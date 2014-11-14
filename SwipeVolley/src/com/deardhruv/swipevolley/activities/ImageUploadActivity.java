@@ -101,7 +101,7 @@ public class ImageUploadActivity extends Activity implements OnClickListener {
 			case REQUESTCODE_PHOTO_PICKER:
 				if (data == null) {
 					// The camera picture does not come with the data. It is set
-					// via the Extra
+					// via Extra
 					// android.provider.MediaStore.EXTRA_OUTPUT when the camera
 					// intent is started.
 					handleTakePictureResult(resultCode);

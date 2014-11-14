@@ -27,13 +27,11 @@ public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 	}
 
 	public ImagePreviewFrag(IUpdateImageView mCallback) {
-		// TODO Auto-generated constructor stub
 		mCallback = this;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null)
 			sharedItemArg = (ImageItem) getArguments().get("item");
@@ -49,7 +47,6 @@ public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		if (sharedItemArg != null) {
 			updateImagePreview(sharedItemArg);
