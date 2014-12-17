@@ -56,7 +56,9 @@ public class ImagePreviewFrag extends Fragment implements IUpdateImageView {
 	@Override
 	public void updateImagePreview(ImageItem sharedItem) {
 		if (sharedItem != null) {
-			imagePreview.setImageUrl(sharedItem.getImgUrl(), MyVolley.getImageLoader());
+			// Replace all spaces from URL.
+			String str = sharedItem.getImgUrl().replaceAll("[ ]", "%20");
+			imagePreview.setImageUrl(str, MyVolley.getImageLoader());
 			txtName.setText(sharedItem.getName());
 
 		}

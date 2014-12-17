@@ -57,7 +57,10 @@ public class ItemDetailAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		holder.image.setDefaultImageResId(R.drawable.ic_launcher);
-		holder.image.setImageUrl(mList.get(position).getImgUrl(), MyVolley.getImageLoader());
+
+		// Replace all spaces from URL.
+		String str = mList.get(position).getImgUrl().replaceAll("[ ]", "%20");
+		holder.image.setImageUrl(str, MyVolley.getImageLoader());
 		holder.text.setText("" + mList.get(position).getName());
 
 		// convertView.setTag(holder);
