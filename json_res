@@ -1,5 +1,21 @@
 {
   "result": [
+     {
+      "img": "http://lehrberuf.info/uploads/111968/Gruppenfoto+kika+Lehrlinge.jpg",
+      "name": "Android 1"
+    },
+    {
+      "img": "http://lehrberuf.info/uploads/111968/Gruppenfoto kika Lehrlinge.jpg",
+      "name": "Androi 2"
+    },
+    {
+      "img": "http://lehrberuf.info/uploads/111968/Gruppenfoto%20kika%20Lehrlinge.jpg",
+      "name": "Androi 3"
+    },
+    {
+      "img": "'http://lehrberuf.info/uploads/111968/Gruppenfoto kika Lehrlinge.jpg'",
+      "name": "Androi 3"
+    },
     {
       "img": "http://www.mediafire.com/convkey/a84f/x6ef6v32tflqa7ffg.jpg",
       "name": "Ancient"
