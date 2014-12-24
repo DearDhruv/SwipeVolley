@@ -57,6 +57,7 @@ public class ItemDetailAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		holder.image.setDefaultImageResId(R.drawable.ic_launcher);
+		holder.image.setErrorImageResId(R.drawable.ic_image_err);
 
 		// Replace all spaces from URL.
 		String str = mList.get(position).getImgUrl().replaceAll("[ ]", "%20");
