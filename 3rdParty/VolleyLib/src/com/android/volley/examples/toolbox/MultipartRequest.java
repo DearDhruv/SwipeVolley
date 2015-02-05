@@ -24,6 +24,9 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 
 public class MultipartRequest extends Request<JSONObject> {
+	
+	private final static String LOGTAG = MultipartRequest.class.getSimpleName();
+
 
 	private MultipartEntity entity = new MultipartEntity();
 	private static String FILE_PART_NAME = "";
@@ -73,8 +76,8 @@ public class MultipartRequest extends Request<JSONObject> {
 					}
 
 					try {
-						Log.i("System out", "Image path :" + key);
-						Log.i("System out", "Image path :" + value);
+						Log.i(LOGTAG, "key: " + key);
+						Log.i(LOGTAG, "value :" + value);
 						entity.addPart(key, new FileBody(new File(value)));
 					} catch (Exception e) {
 						e.printStackTrace();

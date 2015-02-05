@@ -21,7 +21,7 @@ import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.examples.toolbox.updated.IJSONParseListener;
-import com.android.volley.examples.toolbox.updated.JSONRequestResponse;
+import com.android.volley.examples.toolbox.updated.JSONRequestHandler;
 import com.deardhruv.swipevolley.R;
 import com.deardhruv.swipevolley.adapters.ItemDetailAdapter;
 import com.deardhruv.swipevolley.model.ImageItem;
@@ -68,7 +68,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		getActivity().setProgressBarIndeterminateVisibility(true);
 
 		Bundle parms = new Bundle();
-		JSONRequestResponse mResponse = new JSONRequestResponse(mContext);
+		JSONRequestHandler mResponse = new JSONRequestHandler();
 		mResponse.getResponse(ServiceURL.encodeUrl(ServiceURL.mainURL, parms), CODE_IMG_LIST, this);
 	}
 

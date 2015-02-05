@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.deardhruv.swipevolley.model.ImageItem;
 
 public class ItemDetailAdapter extends BaseAdapter {
 
+	private static final String ALLOWED_URI_CHARS = "@#&=*+-_.,:!?()/~'%";
 	private Activity activity;
 	private static LayoutInflater inflater = null;
 	private ArrayList<ImageItem> mList;
@@ -53,14 +55,15 @@ public class ItemDetailAdapter extends BaseAdapter {
 			holder.text = (TextView) convertView.findViewById(R.id.text);
 			holder.image = (NetworkImageView) convertView.findViewById(R.id.image);
 			convertView.setTag(holder);
+			holder.image.setDefaultImageResId(R.drawable.ic_launcher);
+			holder.image.setErrorImageResId(R.drawable.ic_image_err);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.image.setDefaultImageResId(R.drawable.ic_launcher);
-		holder.image.setErrorImageResId(R.drawable.ic_image_err);
 
 		// Replace all spaces from URL.
 		String str = mList.get(position).getImgUrl().replaceAll("[ ]", "%20");
+		str = Uri.encode(str, ALLOWED_URI_CHARS);
 		holder.image.setImageUrl(str, MyVolley.getImageLoader());
 		holder.text.setText("" + mList.get(position).getName());
 

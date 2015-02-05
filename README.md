@@ -5,14 +5,11 @@ This Repo contains the flexible use of **Volley Android** library.
 
 Contains sample of loading images with gigantic size. 
 
+The volley library is updated and handling the response is became easier.
 
-The volley library is updated with getting the response is became easier.
+Use **NetworkImageView** for showing Image from URL/Internet.
+And for zooming use **NetworkImageTouchView**.
 
-Pinch zoom is also available:
+**Uploading** **Single** and **Multiple** file are now smoother.
 
-You just needs to use **NetworkImageTouchView** instead of **NetworkImageView**.
-
-
-**Uploading image** and also multiple image are now available.
-
-http://about.me/DearDhruv
+For more information about developer visit: **http://about.me/DearDhruv**
