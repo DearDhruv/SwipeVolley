@@ -5,29 +5,56 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollViewUpload"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@android:color/background_dark"
-            android:orientation="horizontal" >
-        </LinearLayout>
-    </HorizontalScrollView>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/btnImageUpload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/action_upload_photo"
-        android:drawableLeft="@drawable/upload_photo_btn_sel"
-        android:drawablePadding="5dp"
-        android:padding="5dp"
-        android:text="@string/action_upload_photo"
-        tools:ignore="RtlHardcoded" />
+            <RelativeLayout
+                android:id="@+id/layphotos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/lightergray"
+                android:padding="5dp" >
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/fragment_advertise_viewpager_pics"
+                    android:layout_width="match_parent"
+                    android:layout_height="96dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignWithParentIfMissing="true" />
+
+                <include
+                    android:id="@+id/addInitial"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerHorizontal="false"
+                    layout="@layout/advertise_add_item_inner"
+                    tools:ignore="IncludeLayoutParam" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnImageUpload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/action_upload_photo"
+                android:drawableLeft="@drawable/upload_photo_btn_sel"
+                android:drawablePadding="5dp"
+                android:padding="5dp"
+                android:text="@string/action_upload_photo"
+                tools:ignore="RtlHardcoded" />
+
+            <TextView
+                android:id="@+id/txtResponse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

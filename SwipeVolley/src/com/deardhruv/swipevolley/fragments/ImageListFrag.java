@@ -31,7 +31,7 @@ import com.deardhruv.swipevolley.network.ServiceURL;
  * A fragment which displays the List of the images.
  */
 public class ImageListFrag extends Fragment implements IJSONParseListener, OnItemClickListener {
-	private static final int CODE_IMG_LIST = 101;
+	private static final int REQUEST_IMG_LIST_CODE = 101;
 
 	private ProgressDialog pd;
 	private ListView list;
@@ -67,9 +67,8 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		}
 		getActivity().setProgressBarIndeterminateVisibility(true);
 
-		Bundle parms = new Bundle();
 		JSONRequestHandler mResponse = new JSONRequestHandler();
-		mResponse.getResponse(ServiceURL.encodeUrl(ServiceURL.mainURL, parms), CODE_IMG_LIST, this);
+		mResponse.getResponse(ServiceURL.mainURL, REQUEST_IMG_LIST_CODE, this);
 	}
 
 	@Override
@@ -78,7 +77,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 			pd.dismiss();
 		}
 		getActivity().setProgressBarIndeterminateVisibility(false);
-		if (requestCode == CODE_IMG_LIST) {
+		if (requestCode == REQUEST_IMG_LIST_CODE) {
 			Log.e("error", "" + error.toString());
 		}
 	}
@@ -92,7 +91,7 @@ public class ImageListFrag extends Fragment implements IJSONParseListener, OnIte
 		}
 		getActivity().setProgressBarIndeterminateVisibility(false);
 
-		if (requestCode == CODE_IMG_LIST) {
+		if (requestCode == REQUEST_IMG_LIST_CODE) {
 			Log.d("reponse", "" + response.toString());
 			try {
 				JSONArray mJsonArray = new JSONArray(response.get("result").toString());

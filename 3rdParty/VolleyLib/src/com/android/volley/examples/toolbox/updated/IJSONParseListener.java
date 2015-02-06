@@ -12,9 +12,7 @@ import com.android.volley.VolleyError;
  */
 public interface IJSONParseListener {
 
-	// Interface methods for Responses
-
-	// void ErrorResponse(VolleyError error, int requestCode, int errorcode);
+	// Interface methods for JSON Responses
 
 	/**
 	 * Invoked when any network failure or JSON parsing failure.

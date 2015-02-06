@@ -14,8 +14,6 @@ public interface IParseListener {
 
 	// Interface methods for Responses
 
-	// void ErrorResponse(VolleyError error, int requestCode, int errorcode);
-
 	/**
 	 * Invoked when any network failure or JSON parsing failure.
 	 * 

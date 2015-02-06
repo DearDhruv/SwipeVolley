@@ -35,8 +35,8 @@ public class StoreImageHelper {
 		return new File(StorageUtils.getCacheDirectory(ctx), IMAGES_PATH);
 	}
 
-	public void saveImage(final String urlparam, final String adnumber) throws IOException {
-		final File bitmap = new File(mImageFolder, adnumber);
+	public void saveImage(final String urlparam, final String fileName) throws IOException {
+		final File bitmap = new File(mImageFolder, fileName);
 
 		if (bitmap.exists()) {
 			// NOTHIND TO DO

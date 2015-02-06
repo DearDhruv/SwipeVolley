@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -24,9 +26,8 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 
 public class MultipartRequest extends Request<JSONObject> {
-	
-	private final static String LOGTAG = MultipartRequest.class.getSimpleName();
 
+	private final static String LOGTAG = MultipartRequest.class.getSimpleName();
 
 	private MultipartEntity entity = new MultipartEntity();
 	private static String FILE_PART_NAME = "";
@@ -157,5 +158,15 @@ public class MultipartRequest extends Request<JSONObject> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public Map<String, String> getHeaders() throws AuthFailureError {
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("Accept", "application/json");
+//		params.put("Content-Type","application/json; charset=utf-8");
+		params.put("Connection", "keep-alive");
+		params.put("Content-Type", "application/x-www-form-urlencoded");
+		return params;
 	}
 }
