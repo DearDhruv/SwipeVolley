@@ -36,7 +36,6 @@ public class MainActivity extends FragmentActivity implements ShareViewItem {
 
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
-
 	}
 
 	@Override
